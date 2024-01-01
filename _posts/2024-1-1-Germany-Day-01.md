@@ -1,5 +1,5 @@
 ---
-layout: travel
+layout: post
 title: Germany Day 01
 ---
 
