@@ -3,8 +3,6 @@ layout: post
 title: 2024-1-28-Switzerland
 ---
 
-![pic0]({{site.baseurl}}/images/2024-1-28-Switzerland/2024-1-28-Switzerland.md)
-
 ![pic1]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_112007.jpg)
 
 ![pic2]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_123816.jpg)
