@@ -15,32 +15,45 @@
 
 html {
   font-size: 100%;
+  scroll-behavior: smooth;
 }
 
 body {
-	background: $white;
-  font: 18px/1.4 $helvetica;
+  background: $bg;
+  font: 17px/1.75 $helvetica;
   color: $darkGray;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+
+  @include darkmode {
+    background: $bgDark;
+    color: $textDark;
+  }
 }
 
 .container {
   margin: 0 auto;
-  max-width: 740px;
-  padding: 0 10px;
+  max-width: 760px;
+  padding: 0 20px;
   width: 100%;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: $helveticaNeue;
   color: $darkerGray;
-  font-weight: bold;
+  font-weight: 700;
+  letter-spacing: -0.01em;
 
-  line-height: 1.7;
+  line-height: 1.6;
   margin: 1em 0 15px;
   padding: 0;
 
   @include mobile {
     line-height: 1.4;
+  }
+
+  @include darkmode {
+    color: #f0f0f4;
   }
 }
 
@@ -69,11 +82,12 @@ p {
 }
 
 a {
-  color: $blue;
+  color: $accent;
   text-decoration: none;
-	cursor: pointer;
+  cursor: pointer;
+  transition: color 0.2s ease;
   &:hover, &:active {
-    color: $blue;
+    color: $accentDark;
   }
 }
 
@@ -110,24 +124,41 @@ img {
   max-width: 100%;
 }
 
+// Photos inside posts — rounded, soft shadow, gentle lift on hover
+.entry img,
+.post img {
+  display: block;
+  margin: 26px auto;
+  border-radius: 12px;
+  box-shadow: $shadowMd;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+
+  &:hover {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: $shadowLg;
+  }
+}
+
 // Fixes images in popup boxes from Google Translate
 .gmnoprint img {
   max-width: none;
 }
 
 .date {
-  font-style: italic;
+  font-style: normal;
+  font-size: 14px;
   color: $gray;
+  letter-spacing: 0.03em;
 }
 
 // Specify the color of the selection
 ::-moz-selection {
-  color: $black;
-  background: $lightGray;
+  color: $darkerGray;
+  background: $accentSoft;
 }
 ::selection {
-  color: $black;
-  background: $lightGray;
+  color: $darkerGray;
+  background: $accentSoft;
 }
 
 // Nicolas Gallagher's micro clearfix hack
@@ -151,32 +182,59 @@ img {
 //
 
 .wrapper-masthead {
-  margin-bottom: 50px;
+  margin-bottom: 40px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(250, 249, 248, 0.82);
+  backdrop-filter: saturate(180%) blur(14px);
+  -webkit-backdrop-filter: saturate(180%) blur(14px);
+  border-bottom: 1px solid $border;
+
+  // thin sakura gradient line on top
+  &::before {
+    content: "";
+    display: block;
+    height: 3px;
+    background: linear-gradient(90deg, #f3c4cf, $accent, #9d7bd8);
+  }
+
+  @include darkmode {
+    background: rgba(22, 22, 26, 0.8);
+    border-bottom-color: $borderDark;
+  }
 }
 
 .masthead {
-  padding: 20px 0;
-  border-bottom: 1px solid $lightGray;
+  padding: 16px 0;
 
   @include mobile {
     text-align: center;
+    padding: 14px 0;
   }
 }
 
 .site-avatar {
   float: left;
-  width: 70px;
-  height: 70px;
+  width: 56px;
+  height: 56px;
   margin-right: 15px;
 
   @include mobile {
     float: none;
     display: block;
-    margin: 0 auto;
+    margin: 0 auto 6px;
   }
 
   img {
-    border-radius: 5px;
+    border-radius: 50%;
+    border: 2px solid rgba(212, 115, 138, 0.35);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+
+    &:hover {
+      transform: rotate(-6deg) scale(1.06);
+      box-shadow: 0 4px 14px rgba(212, 115, 138, 0.35);
+    }
   }
 }
 
@@ -191,19 +249,36 @@ img {
 }
 
 .site-name {
-  margin: 0;
-  color: $darkGray;
+  margin: 2px 0 0;
+  color: $darkerGray;
   cursor: pointer;
   font-family: $helveticaNeue;
-  font-weight: 300;
-  font-size: 28px;
+  font-weight: 700;
+  font-size: 24px;
   letter-spacing: 1px;
+
+  a {
+    background: linear-gradient(90deg, $darkerGray, $darkerGray);
+    -webkit-background-clip: text;
+    background-clip: text;
+    transition: color 0.25s ease;
+
+    &:hover {
+      color: $accent;
+    }
+  }
+
+  @include darkmode {
+    color: #f0f0f4;
+    a { background: none; }
+  }
 }
 
 .site-description {
-  margin: -5px 0 0 0;
+  margin: -2px 0 0 0;
   color: $gray;
-  font-size: 16px;
+  font-size: 14px;
+  letter-spacing: 0.06em;
 
   @include mobile {
     margin: 3px 0;
@@ -212,27 +287,52 @@ img {
 
 nav {
   float: right;
-  margin-top: 23px; // @TODO: Vertically middle align
+  margin-top: 16px;
   font-family: $helveticaNeue;
-  font-size: 18px;
+  font-size: 16px;
 
   @include mobile {
     float: none;
     margin-top: 9px;
     display: block;
-    font-size: 16px;
+    font-size: 15px;
   }
 
   a {
-    margin-left: 20px;
+    margin-left: 22px;
     color: $darkGray;
     text-align: right;
-    font-weight: 300;
+    font-weight: 500;
     letter-spacing: 1px;
+    position: relative;
+    padding-bottom: 4px;
+
+    // animated underline
+    &::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 2px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, $accent, #9d7bd8);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.25s ease;
+    }
+
+    &:hover {
+      color: $accent;
+      &::after { transform: scaleX(1); }
+    }
 
     @include mobile {
       margin: 0 10px;
-      color: $blue;
+    }
+
+    @include darkmode {
+      color: $textDark;
     }
   }
 }
@@ -241,24 +341,99 @@ nav {
 // .main
 //
 
-.posts > .post {
-  padding-bottom: 2em;
-  border-bottom: 1px solid $lightGray;
+#main {
+  animation: fadeUp 0.5s ease both;
 }
 
-.posts > .post:last-child {
-  padding-bottom: 1em;
-  border-bottom: none;
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+// Post cards on the index page
+.posts > .post {
+  background: $card;
+  border: 1px solid $border;
+  border-radius: 16px;
+  padding: 28px 30px 24px;
+  margin-bottom: 28px;
+  box-shadow: $shadowSm;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: $shadowMd;
+  }
+
+  @include mobile {
+    padding: 20px 18px 18px;
+    border-radius: 12px;
+  }
+
+  @include darkmode {
+    background: $cardDark;
+    border-color: $borderDark;
+  }
+
+  h1 {
+    margin-top: 0;
+    font-size: 24px;
+
+    a {
+      transition: color 0.2s ease;
+      &:hover { color: $accent; }
+    }
+  }
+
+  // Only tease the excerpt: clamp height with a soft fade-out
+  .entry {
+    position: relative;
+    max-height: 420px;
+    overflow: hidden;
+
+    &::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 90px;
+      background: linear-gradient(rgba(255, 255, 255, 0), $card);
+      pointer-events: none;
+
+      @include darkmode {
+        background: linear-gradient(rgba(30, 30, 36, 0), $cardDark);
+      }
+    }
+
+    img {
+      margin: 18px auto;
+      &:hover { transform: none; box-shadow: $shadowMd; }
+    }
+  }
 }
 
 .post {
   blockquote {
-    margin: 1.8em .8em;
-    border-left: 2px solid $gray;
-    padding: 0.1em 1em;
-    color: $gray;
-    font-size: 22px;
+    margin: 1.8em 0;
+    border-left: 3px solid $accent;
+    background: $accentSoft;
+    border-radius: 0 10px 10px 0;
+    padding: 0.6em 1.2em;
+    color: darken($gray, 8%);
+    font-size: 19px;
     font-style: italic;
+
+    @include darkmode {
+      background: rgba(212, 115, 138, 0.1);
+      color: $textDark;
+    }
   }
 
   .comments {
@@ -266,21 +441,120 @@ nav {
   }
 
   .read-more {
+    display: inline-block;
+    margin-top: 16px;
+    padding: 7px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    font-size: 15px;
+    color: $accent;
+    border: 1.5px solid rgba(212, 115, 138, 0.5);
+    border-radius: 999px;
+    transition: all 0.25s ease;
+
+    &:hover {
+      color: #fff;
+      background: linear-gradient(90deg, $accent, $accentDark);
+      border-color: transparent;
+      box-shadow: 0 4px 14px rgba(212, 115, 138, 0.4);
+    }
+  }
+}
+
+// Single post page
+.post > h1 {
+  font-size: 32px;
+  margin-bottom: 4px;
+
+  @include mobile {
+    font-size: 26px;
+  }
+}
+
+.post > .date {
+  display: inline-block;
+  margin-bottom: 18px;
+  padding: 3px 12px;
+  background: $accentSoft;
+  color: $accentDark;
+  border-radius: 999px;
+
+  @include darkmode {
+    background: rgba(212, 115, 138, 0.14);
+    color: #e8a2b3;
   }
 }
 
 .wrapper-footer {
-  margin-top: 50px;
-  border-top: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
-  background-color: $lightGray;
+  margin-top: 70px;
+  border-top: 1px solid $border;
+  background: transparent;
+
+  @include darkmode {
+    border-top-color: $borderDark;
+  }
 }
 
 footer {
-  padding: 20px 0;
+  padding: 26px 0 34px;
   text-align: center;
+
+  .svg-icon {
+    opacity: 0.75;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+
+    &:hover {
+      opacity: 1;
+      transform: translateY(-3px);
+    }
+  }
+
+  .footer-copy {
+    margin-top: 10px;
+    font-size: 13px;
+    color: $gray;
+    letter-spacing: 0.04em;
+  }
+}
+
+// Back-to-top button
+.back-to-top {
+  position: fixed;
+  right: 26px;
+  bottom: 30px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: $card;
+  border: 1px solid $border;
+  box-shadow: $shadowMd;
+  color: $accent;
+  font-size: 18px;
+  line-height: 40px;
+  text-align: center;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: all 0.3s ease;
+  z-index: 90;
+
+  &.show {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+
+  &:hover {
+    background: $accent;
+    color: #fff;
+    border-color: transparent;
+  }
+
+  @include darkmode {
+    background: $cardDark;
+    border-color: $borderDark;
+  }
 }
 
 // Settled on moving the import of syntax highlighting to the bottom of the CSS

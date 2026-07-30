@@ -42,9 +42,25 @@
       <div class="container">
         <footer class="footer">
           {% include svg-icons.html %}
+          <p class="footer-copy">© {{ site.time | date: "%Y" }} {{ site.name }} · {{ site.description }}</p>
         </footer>
       </div>
     </div>
+
+    <a href="#" class="back-to-top" aria-label="Back to top">↑</a>
+
+    <script>
+      (function () {
+        var btn = document.querySelector('.back-to-top');
+        window.addEventListener('scroll', function () {
+          btn.classList.toggle('show', window.scrollY > 400);
+        }, { passive: true });
+        btn.addEventListener('click', function (e) {
+          e.preventDefault();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      })();
+    </script>
 
     {% include analytics.html %}
   </body>

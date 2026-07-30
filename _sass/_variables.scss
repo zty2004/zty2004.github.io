@@ -3,25 +3,51 @@
 // VARIABLES
 //
 
-// Colors
-$blue: #4183C4;
+// Brand colors — soft sakura theme for「咲かない花」
+$accent: #d4738a;        // sakura pink
+$accentDark: #b85570;
+$accentSoft: #fbeef1;
+$blue: #4183C4;          // kept for legacy references
 
 // Grays
 $black: #000;
-$darkerGray: #222;
-$darkGray: #333;
-$gray: #666;
-$lightGray: #eee;
+$darkerGray: #2b2b33;
+$darkGray: #3a3a44;
+$gray: #6e6e78;
+$lightGray: #ececef;
 $white: #fff;
 
-// Font stacks
-$helvetica: Helvetica, Arial, sans-serif;
-$helveticaNeue: "Helvetica Neue", Helvetica, Arial, sans-serif;
-$georgia: Georgia, serif;
+// Surfaces
+$bg: #faf9f8;            // warm paper background
+$card: #ffffff;
+$border: rgba(0, 0, 0, 0.07);
+
+// Dark mode counterparts
+$bgDark: #16161a;
+$cardDark: #1e1e24;
+$textDark: #d8d8de;
+$borderDark: rgba(255, 255, 255, 0.09);
+
+// Font stacks (with CJK fallbacks)
+$helvetica: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
+            "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+$helveticaNeue: $helvetica;
+$georgia: Georgia, "Songti SC", "Noto Serif SC", serif;
+
+// Shadows
+$shadowSm: 0 1px 3px rgba(20, 20, 30, 0.06);
+$shadowMd: 0 6px 24px rgba(20, 20, 30, 0.08);
+$shadowLg: 0 14px 40px rgba(20, 20, 30, 0.14);
 
 // Mobile breakpoints
 @mixin mobile {
   @media screen and (max-width: 640px) {
+    @content;
+  }
+}
+
+@mixin darkmode {
+  @media (prefers-color-scheme: dark) {
     @content;
   }
 }
