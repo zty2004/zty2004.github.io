@@ -557,6 +557,267 @@ footer {
   }
 }
 
+/*********************/
+/* ACADEMIC HOMEPAGE */
+/*********************/
+
+.academic-home {
+
+  // ----- Profile header -----
+  .profile {
+    display: flex;
+    align-items: flex-start;
+    gap: 30px;
+    padding: 34px 0 26px;
+    border-bottom: 1px solid $border;
+
+    @include mobile {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 18px;
+    }
+
+    @include darkmode {
+      border-bottom-color: $borderDark;
+    }
+  }
+
+  .profile-photo {
+    flex-shrink: 0;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid rgba(212, 115, 138, 0.35);
+    box-shadow: $shadowMd;
+  }
+
+  .profile-name {
+    margin: 0 0 2px;
+    font-size: 30px;
+
+    .profile-alias {
+      font-size: 18px;
+      font-weight: 400;
+      color: $gray;
+    }
+  }
+
+  .profile-title {
+    margin: 2px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: $accentDark;
+  }
+
+  .profile-affiliation {
+    margin: 2px 0 10px;
+    font-size: 15px;
+    color: $gray;
+  }
+
+  .profile-bio {
+    margin: 10px 0;
+    font-size: 16px;
+  }
+
+  .profile-links {
+    list-style: none;
+    margin: 14px 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    @include mobile {
+      justify-content: center;
+    }
+
+    li { margin: 0; }
+
+    a {
+      display: inline-block;
+      padding: 5px 14px;
+      font-size: 14px;
+      font-weight: 500;
+      color: $accentDark;
+      background: $accentSoft;
+      border-radius: 999px;
+      transition: all 0.25s ease;
+
+      &:hover {
+        color: #fff;
+        background: linear-gradient(90deg, $accent, $accentDark);
+        box-shadow: 0 4px 12px rgba(212, 115, 138, 0.35);
+        transform: translateY(-1px);
+      }
+
+      @include darkmode {
+        background: rgba(212, 115, 138, 0.14);
+        color: #e8a2b3;
+      }
+    }
+  }
+
+  // ----- Generic section -----
+  .home-section {
+    padding: 26px 0 6px;
+
+    > h2 {
+      margin: 0 0 16px;
+      padding-bottom: 8px;
+      font-size: 22px;
+      border-bottom: 2px solid transparent;
+      border-image: linear-gradient(90deg, $accent, #9d7bd8, transparent) 1;
+      border-bottom-width: 2px;
+      border-bottom-style: solid;
+    }
+  }
+
+  // ----- News -----
+  .news-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      padding: 7px 0;
+      border-bottom: 1px dashed $border;
+
+      &:last-child { border-bottom: none; }
+
+      @include darkmode {
+        border-bottom-color: $borderDark;
+      }
+    }
+
+    .news-date {
+      flex-shrink: 0;
+      font-size: 14px;
+      font-weight: 600;
+      color: $accentDark;
+      font-variant-numeric: tabular-nums;
+
+      @include darkmode {
+        color: #e8a2b3;
+      }
+    }
+  }
+
+  // ----- Research tags -----
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .tag {
+    padding: 4px 14px;
+    font-size: 14px;
+    font-weight: 500;
+    color: $darkGray;
+    background: $card;
+    border: 1px solid $border;
+    border-radius: 999px;
+    box-shadow: $shadowSm;
+
+    @include darkmode {
+      color: $textDark;
+      background: $cardDark;
+      border-color: $borderDark;
+    }
+  }
+
+  // ----- Education timeline -----
+  .edu-item {
+    display: flex;
+    gap: 20px;
+    padding: 10px 0;
+
+    @include mobile {
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .edu-time {
+      flex-shrink: 0;
+      width: 170px;
+      font-size: 14px;
+      font-weight: 600;
+      color: $gray;
+      font-variant-numeric: tabular-nums;
+      padding-top: 3px;
+    }
+
+    .edu-body {
+      h3 { margin: 0 0 2px; font-size: 17px; }
+      p { margin: 0; font-size: 15px; color: $gray; }
+    }
+  }
+
+  // ----- Publications -----
+  .pub-item {
+    position: relative;
+    background: $card;
+    border: 1px solid $border;
+    border-left: 3px solid $accent;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 14px;
+    box-shadow: $shadowSm;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: $shadowMd;
+    }
+
+    @include darkmode {
+      background: $cardDark;
+      border-color: $borderDark;
+      border-left-color: $accent;
+    }
+
+    h3 {
+      margin: 6px 0 4px;
+      font-size: 17px;
+    }
+
+    .pub-venue {
+      display: inline-block;
+      padding: 2px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: #fff;
+      background: linear-gradient(90deg, $accent, $accentDark);
+      border-radius: 999px;
+
+      &.pub-venue-project {
+        background: linear-gradient(90deg, #8d7bd8, #6f5bb5);
+      }
+    }
+
+    .pub-authors {
+      margin: 2px 0;
+      font-size: 14px;
+      color: $gray;
+    }
+
+    .pub-links {
+      margin: 4px 0 0;
+      font-size: 14px;
+
+      a { margin-right: 8px; font-weight: 500; }
+    }
+  }
+}
+
 // Settled on moving the import of syntax highlighting to the bottom of the CSS
 // ... Otherwise it really bloats up the top of the CSS file and makes it difficult to find the start
 @import "highlights";
