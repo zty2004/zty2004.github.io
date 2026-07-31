@@ -20,5 +20,11 @@ layout: default
     {{ content }}
   </div>
 
-  {% include disqus.html %}
+  <div class="post-meta-footer">
+    <span id="busuanzi_container_page_pv" style="display:none">
+      👁 <span id="busuanzi_value_page_pv"></span> reads
+    </span>
+  </div>
+
+  {% include giscus.html %}
 </article>

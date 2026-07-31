@@ -1,0 +1,43 @@
+{% if site.giscus.repo %}
+<div class="comments">
+  <div class="giscus"></div>
+  <script>
+    (function () {
+      // giscus theme follows the site's light/dark switch
+      function giscusTheme() {
+        return document.documentElement.getAttribute('data-theme') === 'dark'
+          ? 'noborder_dark' : 'light';
+      }
+
+      var s = document.createElement('script');
+      s.src = 'https://giscus.app/client.js';
+      s.async = true;
+      s.crossOrigin = 'anonymous';
+      s.setAttribute('data-repo', '{{ site.giscus.repo }}');
+      s.setAttribute('data-repo-id', '{{ site.giscus.repo_id }}');
+      s.setAttribute('data-category', '{{ site.giscus.category }}');
+      s.setAttribute('data-category-id', '{{ site.giscus.category_id }}');
+      s.setAttribute('data-mapping', 'pathname');
+      s.setAttribute('data-strict', '0');
+      s.setAttribute('data-reactions-enabled', '1');
+      s.setAttribute('data-emit-metadata', '0');
+      s.setAttribute('data-input-position', 'top');
+      s.setAttribute('data-theme', giscusTheme());
+      s.setAttribute('data-lang', 'zh-CN');
+      s.setAttribute('data-loading', 'lazy');
+      document.querySelector('.giscus').appendChild(s);
+
+      // re-theme the giscus iframe when the user flips the theme switch
+      new MutationObserver(function () {
+        var iframe = document.querySelector('iframe.giscus-frame');
+        if (iframe) {
+          iframe.contentWindow.postMessage(
+            { giscus: { setConfig: { theme: giscusTheme() } } },
+            'https://giscus.app'
+          );
+        }
+      }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    })();
+  </script>
+</div>
+{% endif %}
