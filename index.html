@@ -19,7 +19,10 @@ layout: default
 
       {% if post.thumb %}
       <a class="card-thumb" href="{{ site.baseurl }}{{ post.url }}">
-        <img src="{{ site.baseurl }}{{ post.thumb }}" alt="{{ post.title }}" loading="lazy" decoding="async">
+        <picture>
+          <source srcset="{{ site.baseurl }}{{ post.thumb | replace: '.jpg', '.webp' }}" type="image/webp">
+          <img src="{{ site.baseurl }}{{ post.thumb }}" alt="{{ post.title }}" loading="lazy" decoding="async">
+        </picture>
       </a>
       <div class="entry entry-text">
         {{ post.excerpt | strip_html | truncate: 120 }}
