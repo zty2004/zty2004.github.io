@@ -1564,6 +1564,13 @@ div.highlight.has-copy {
   padding: 2px 0 2px 14px;
   border-left: 2px solid rgba(222, 118, 74, 0.28);
   z-index: 50;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+
+  // hidden while the footer is on screen so it never overlaps it
+  &.near-footer {
+    opacity: 0;
+    visibility: hidden;
+  }
 
   @media screen and (min-width: 1240px) {
     display: block;

@@ -39,7 +39,10 @@
     });
     flush();
 
-    var items = [];  // every gallery image, in document order
+    // Every image in the post belongs to the lightbox, in document order —
+    // grids are only a layout choice, so standalone photos between paragraphs
+    // must stay navigable with the arrow keys too.
+    var items = Array.prototype.slice.call(entry.querySelectorAll('img'));
 
     grids.forEach(function (group) {
       var grid = document.createElement('div');
@@ -56,13 +59,18 @@
         cell.appendChild(media);
         grid.appendChild(cell);
         if (node.tagName === 'P') node.remove();
-        var img = cell.querySelector('img');
-        cell.addEventListener('click', function () { open(items.indexOf(img)); });
-        items.push(img);
       });
     });
 
     if (!items.length) return;
+
+    // clicking any image — gridded or standalone — opens the viewer
+    entry.addEventListener('click', function (e) {
+      var img = e.target.closest('img');
+      if (!img || img.closest('a')) return;
+      var i = items.indexOf(img);
+      if (i >= 0) open(i);
+    });
 
     // ---------- 2. minimal lightbox with prev/next ----------
     var box = document.createElement('div');
