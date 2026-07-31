@@ -1200,6 +1200,11 @@ footer {
 div.highlight.has-copy {
   position: relative;
 
+  // on touch devices the always-visible button must not cover code
+  @media (hover: none) {
+    padding-top: 34px;
+  }
+
   .code-copy {
     position: absolute;
     top: 8px;
@@ -1231,6 +1236,15 @@ div.highlight.has-copy {
 
   &:hover .code-copy {
     opacity: 1;
+  }
+
+  // touch devices have no hover: keep the button visible at all times
+  @media (hover: none) {
+    .code-copy {
+      opacity: 0.9;
+      padding: 5px 14px;   // easier to tap
+      font-size: 12.5px;
+    }
   }
 }
 
