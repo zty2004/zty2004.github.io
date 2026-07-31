@@ -129,29 +129,42 @@
       setFolded(!aside.classList.contains('collapsed'));
     });
 
-    // mobile: collapsible list above the content (fully expanded inside)
+    // mobile: collapsible list above the content (same foldable tree)
     var details = document.createElement('details');
     details.className = 'toc-mobile';
     details.innerHTML = '<summary>目录</summary>';
-    details.appendChild(renderList(tree.children, false));
+    details.appendChild(renderList(tree.children, true));
     entry.parentNode.insertBefore(details, entry);
 
-    // highlight the section in view and unfold its ancestors
-    var links = aside.querySelectorAll('a');
+    // tapping a link closes the mobile panel so it stops covering the text
+    details.addEventListener('click', function (e) {
+      if (e.target.tagName === 'A') details.open = false;
+    });
+
+    // highlight the section in view and unfold its ancestors (both TOCs)
+    var links = [].concat(
+      Array.prototype.slice.call(aside.querySelectorAll('a')),
+      Array.prototype.slice.call(details.querySelectorAll('a'))
+    );
     var byId = {};
-    links.forEach(function (a) { byId[decodeURIComponent(a.hash.slice(1))] = a; });
+    links.forEach(function (a) {
+      var id = decodeURIComponent(a.hash.slice(1));
+      (byId[id] = byId[id] || []).push(a);
+    });
     var observer = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
         if (!e.isIntersecting) return;
-        var a = byId[e.target.id];
-        if (!a) return;
+        var hits = byId[e.target.id];
+        if (!hits) return;
         links.forEach(function (x) { x.classList.remove('active'); });
-        a.classList.add('active');
-        var li = a.closest('li');
-        while (li) {
-          li.classList.add('open');
-          li = li.parentElement ? li.parentElement.closest('li') : null;
-        }
+        hits.forEach(function (a) {
+          a.classList.add('active');
+          var li = a.closest('li');
+          while (li) {
+            li.classList.add('open');
+            li = li.parentElement ? li.parentElement.closest('li') : null;
+          }
+        });
       });
     }, { rootMargin: '-90px 0px -70% 0px' });
     heads.forEach(function (h) { observer.observe(h); });

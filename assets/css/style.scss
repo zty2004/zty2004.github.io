@@ -1473,6 +1473,7 @@ div.highlight.has-copy {
       position: relative;
       padding-left: 18px;
       margin: 0;
+      display: none;
 
       &::before {
         content: "";
@@ -1511,13 +1512,58 @@ div.highlight.has-copy {
     }
   }
 
+  li.open > ul {
+    display: block;
+  }
+
+  .toc-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  // bigger hit area for touch
+  .toc-toggle {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    font-size: 12px;
+    line-height: 26px;
+    text-align: center;
+    color: $gray;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.2s ease;
+
+    &.toc-pad {
+      pointer-events: none;
+    }
+  }
+
+  li.open > .toc-row > .toc-toggle {
+    transform: rotate(90deg);
+  }
+
   a {
     display: block;
-    padding: 4px 0;
+    flex: 1;
+    min-width: 0;
+    padding: 5px 0;
     font-size: 14.5px;
+    line-height: 1.5;
     color: $gray;
 
     &:hover { color: $accentDark; }
+
+    &.active {
+      color: $accentDark;
+      font-weight: 600;
+
+      @include darkmode { color: #f0a883; }
+    }
   }
 }
 
