@@ -1367,22 +1367,28 @@ footer {
 /* GALLERY           */
 /*********************/
 
+// A loose, hand-laid photo wall: masonry rows, real aspect ratios, and a
+// fraction of a degree of tilt per tile (set by gallery.js via --tilt/--drift).
 .gallery {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin: 26px 0;
+  grid-auto-rows: 6px;      // must match ROW in gallery.js
+  gap: 10px;                // must match GAP in gallery.js
+  margin: 30px 0;
 
   @media screen and (max-width: 900px) {
     grid-template-columns: repeat(2, 1fr);
   }
 
   @include mobile {
-    gap: 6px;
+    gap: 8px;
   }
 }
 
 .gallery-item {
+  --tilt: 0deg;
+  --drift: 0px;
+
   display: block;
   padding: 0;
   border: none;
@@ -1391,21 +1397,37 @@ footer {
   overflow: hidden;
   cursor: zoom-in;
   line-height: 0;
+  box-shadow: $shadowSm;
+  transform: rotate(var(--tilt)) translateY(var(--drift));
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+              box-shadow 0.35s ease, z-index 0s;
+
+  &.is-wide {
+    grid-column: span 2;
+  }
 
   picture, img {
     display: block;
     width: 100%;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
+    height: 100%;
+    object-fit: cover;   // fills its slot; the row span already matches the ratio
     margin: 0;
     border-radius: 0;
     box-shadow: none;
-    transition: transform 0.4s ease;
   }
 
-  &:hover img {
-    transform: scale(1.06);
-    box-shadow: none;
+  // hover straightens the photo and lifts it above its neighbours
+  &:hover,
+  &:focus-visible {
+    position: relative;
+    z-index: 2;
+    transform: rotate(0deg) translateY(-4px) scale(1.03);
+    box-shadow: $shadowLg;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transform: none;
+    &:hover { transform: none; }
   }
 }
 

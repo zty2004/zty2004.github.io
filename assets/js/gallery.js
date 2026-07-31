@@ -44,6 +44,7 @@
     // must stay navigable with the arrow keys too.
     var items = Array.prototype.slice.call(entry.querySelectorAll('img'));
 
+    var builtGrids = [];
     grids.forEach(function (group) {
       var grid = document.createElement('div');
       grid.className = 'gallery';
@@ -60,7 +61,61 @@
         grid.appendChild(cell);
         if (node.tagName === 'P') node.remove();
       });
+      builtGrids.push(grid);
     });
+
+    // ---------- Mission-Control-ish mosaic ----------
+    // Photos keep their real aspect ratio and flow into a masonry grid; a few
+    // get a wider slot and every tile is nudged a fraction of a degree so the
+    // wall feels hand-laid rather than machine-stamped.
+    var ROW = 6;   // grid-auto-rows, px  (keep in sync with the stylesheet)
+    var GAP = 10;  // gallery gap, px
+
+    function ratioOf(img) {
+      var w = parseFloat(img.getAttribute('width')) || img.naturalWidth || 4;
+      var h = parseFloat(img.getAttribute('height')) || img.naturalHeight || 3;
+      return h / w;
+    }
+
+    // deterministic pseudo-random so a reload doesn't reshuffle the wall
+    function jitter(i) {
+      var x = Math.sin((i + 1) * 12.9898) * 43758.5453;
+      return x - Math.floor(x);           // 0..1
+    }
+
+    function layout(grid) {
+      var cells = Array.prototype.slice.call(grid.children);
+      var cols = getComputedStyle(grid).gridTemplateColumns.split(' ').length;
+      var colW = (grid.clientWidth - GAP * (cols - 1)) / cols;
+      if (!colW || colW < 1) return;
+
+      cells.forEach(function (cell, i) {
+        // one in five gets a double-width slot (only when there is room)
+        var wide = cols >= 3 && jitter(i) > 0.8;
+        cell.classList.toggle('is-wide', wide);
+        var slotW = wide ? colW * 2 + GAP : colW;
+        var h = slotW * ratioOf(cell.querySelector('img'));
+        cell.style.gridRowEnd = 'span ' + Math.max(2, Math.round((h + GAP) / (ROW + GAP)));
+
+        // tilt: -1.6deg .. +1.6deg, plus a hair of vertical drift
+        var tilt = (jitter(i + 100) - 0.5) * 3.2;
+        var drift = (jitter(i + 200) - 0.5) * 5;
+        cell.style.setProperty('--tilt', tilt.toFixed(2) + 'deg');
+        cell.style.setProperty('--drift', drift.toFixed(1) + 'px');
+      });
+    }
+
+    function layoutAll() { builtGrids.forEach(layout); }
+    layoutAll();
+
+    // re-flow on resize (column count and width both change)
+    var rt = null;
+    window.addEventListener('resize', function () {
+      clearTimeout(rt);
+      rt = setTimeout(layoutAll, 150);
+    });
+    // images may report different intrinsic sizes than the attributes claim
+    window.addEventListener('load', layoutAll);
 
     if (!items.length) return;
 
