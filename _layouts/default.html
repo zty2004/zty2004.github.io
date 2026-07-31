@@ -132,6 +132,32 @@
     <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
     {% endif %}
 
+    <!-- Lightbox for post photos (medium-zoom, ~3KB) -->
+    <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js"></script>
+    <script>
+      window.addEventListener('DOMContentLoaded', function () {
+        if (typeof mediumZoom !== 'function') return;
+        if (document.querySelector('.posts')) return; // index page: cards link to posts instead
+        // skip images wrapped in links
+        var imgs = Array.prototype.filter.call(
+          document.querySelectorAll('article.post > .entry img'),
+          function (img) { return !img.closest('a'); }
+        );
+        if (!imgs.length) return;
+
+        function overlayBg() {
+          return document.documentElement.getAttribute('data-theme') === 'dark'
+            ? 'rgba(23, 27, 38, 0.92)'   // dusk harbor
+            : 'rgba(250, 246, 240, 0.94)'; // morning mist
+        }
+        var zoom = mediumZoom(imgs, { background: overlayBg(), margin: 24 });
+
+        new MutationObserver(function () {
+          zoom.update({ background: overlayBg() });
+        }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+      });
+    </script>
+
     {% include analytics.html %}
   </body>
 </html>
