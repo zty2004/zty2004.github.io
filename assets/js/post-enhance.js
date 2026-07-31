@@ -101,31 +101,31 @@
 
     var tree = buildTree();
 
-    // desktop: floating sidebar, top level visible, deeper levels fold out;
+    // desktop: right-hand sidebar, top level visible, deeper levels fold out;
     // the whole panel can also be minimized (state remembered)
     var aside = document.createElement('nav');
     aside.className = 'toc';
-    var titleBar = document.createElement('div');
+    var titleBar = document.createElement('button');
+    titleBar.type = 'button';
     titleBar.className = 'toc-title';
-    titleBar.innerHTML = '<span>目录</span>';
-    var fold = document.createElement('button');
-    fold.type = 'button';
-    fold.className = 'toc-fold';
-    fold.title = '折叠/展开目录';
-    titleBar.appendChild(fold);
+    titleBar.title = '折叠/展开目录';
+    titleBar.innerHTML = '<span class="toc-title-text">目录</span>' +
+                         '<span class="toc-fold"></span>';
     aside.appendChild(titleBar);
     aside.appendChild(renderList(tree.children, true));
     document.body.appendChild(aside);
 
+    var fold = titleBar.querySelector('.toc-fold');
     function setFolded(folded) {
       aside.classList.toggle('collapsed', folded);
       fold.textContent = folded ? '☰' : '−';
+      titleBar.setAttribute('aria-expanded', folded ? 'false' : 'true');
       try { localStorage.setItem('tocCollapsed', folded ? '1' : ''); } catch (e) {}
     }
     var saved = false;
     try { saved = localStorage.getItem('tocCollapsed') === '1'; } catch (e) {}
     setFolded(saved);
-    fold.addEventListener('click', function () {
+    titleBar.addEventListener('click', function () {
       setFolded(!aside.classList.contains('collapsed'));
     });
 

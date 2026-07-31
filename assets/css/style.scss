@@ -1241,73 +1241,78 @@ div.highlight.has-copy {
   }
 }
 
-// desktop floating TOC — only when there is side room
+// desktop side TOC — sits on the page background, no card container;
+// a soft left rule + a labelled header make it read as "table of contents"
 .toc {
   display: none;
   position: fixed;
   top: 130px;
-  left: calc(50% + 400px);
-  width: 230px;
+  left: calc(50% + 396px);
+  width: 240px;
   max-height: calc(100vh - 180px);
   overflow-y: auto;
-  padding: 14px 16px;
-  background: $card;
-  border: 1px solid $border;
-  border-radius: 12px;
-  box-shadow: $shadowSm;
+  padding: 2px 0 2px 14px;
+  border-left: 2px solid rgba(222, 118, 74, 0.28);
   z-index: 50;
 
   @media screen and (min-width: 1240px) {
     display: block;
   }
 
-  @include darkmode {
-    background: $cardDark;
-    border-color: $borderDark;
+  // slim scrollbar so the bare panel stays quiet
+  scrollbar-width: thin;
+  &::-webkit-scrollbar { width: 5px; }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(110, 110, 120, 0.28);
+    border-radius: 3px;
   }
 
+  @include darkmode {
+    border-left-color: rgba(222, 118, 74, 0.35);
+  }
+
+  // the whole header is the fold/unfold hit area
   .toc-title {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 13px;
+    gap: 8px;
+    width: 100%;
+    padding: 4px 6px 6px 2px;
+    font-family: $helveticaNeue;
+    font-size: 12px;
     font-weight: 700;
-    letter-spacing: 0.08em;
-    color: $gray;
-    margin-bottom: 8px;
-  }
-
-  // minimize/restore the whole panel
-  .toc-fold {
-    width: 22px;
-    height: 22px;
-    padding: 0;
-    font-size: 13px;
-    line-height: 20px;
-    text-align: center;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
     color: $gray;
     background: transparent;
-    border: 1px solid transparent;
+    border: none;
     border-radius: 6px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: color 0.2s ease, background 0.2s ease;
 
     &:hover {
       color: $accentDark;
-      border-color: $border;
+      background: rgba(222, 118, 74, 0.06);
+
+      @include darkmode { color: #f0a883; }
     }
+  }
+
+  .toc-fold {
+    flex-shrink: 0;
+    font-size: 13px;
+    line-height: 1;
+    opacity: 0.7;
   }
 
   &.collapsed {
     width: auto;
-    padding: 8px 12px;
+    max-width: 150px;
 
     > ul { display: none; }
 
-    .toc-title {
-      margin-bottom: 0;
-      gap: 8px;
-    }
+    .toc-title { padding-bottom: 4px; }
   }
 
   ul {
@@ -1321,41 +1326,33 @@ div.highlight.has-copy {
       padding-left: 16px;
       display: none;
 
-      // vertical trunk running down the children
-      &::before {
-        content: "";
-        position: absolute;
-        left: 6px;
-        top: 0;
-        bottom: 12px;
-        border-left: 1px dashed rgba(110, 110, 120, 0.45);
-      }
-
       li {
         position: relative;
 
-        // horizontal branch into each child
+        // vertical trunk: full height, except the last child which stops
+        // at its own branch — giving the `└──` look without masking
         &::before {
+          content: "";
+          position: absolute;
+          left: -10px;
+          top: 0;
+          bottom: 0;
+          border-left: 1px dashed rgba(110, 110, 120, 0.45);
+        }
+
+        &:last-child::before {
+          bottom: auto;
+          height: 13px;
+        }
+
+        // horizontal branch into each child
+        &::after {
           content: "";
           position: absolute;
           left: -10px;
           top: 13px;
           width: 10px;
           border-top: 1px dashed rgba(110, 110, 120, 0.45);
-        }
-
-        // last child: stop the trunk right at its branch
-        &:last-child::after {
-          content: "";
-          position: absolute;
-          left: -10px;
-          top: 13px;
-          bottom: 0;
-          border-left: 1px solid $card;
-
-          @include darkmode {
-            border-left-color: $cardDark;
-          }
         }
       }
     }
@@ -1475,15 +1472,6 @@ div.highlight.has-copy {
       margin: 0;
       display: none;
 
-      &::before {
-        content: "";
-        position: absolute;
-        left: 6px;
-        top: 0;
-        bottom: 14px;
-        border-left: 1px dashed rgba(110, 110, 120, 0.45);
-      }
-
       li {
         position: relative;
 
@@ -1491,22 +1479,23 @@ div.highlight.has-copy {
           content: "";
           position: absolute;
           left: -12px;
-          top: 15px;
-          width: 12px;
-          border-top: 1px dashed rgba(110, 110, 120, 0.45);
+          top: 0;
+          bottom: 0;
+          border-left: 1px dashed rgba(110, 110, 120, 0.45);
         }
 
-        &:last-child::after {
+        &:last-child::before {
+          bottom: auto;
+          height: 15px;
+        }
+
+        &::after {
           content: "";
           position: absolute;
           left: -12px;
           top: 15px;
-          bottom: 0;
-          border-left: 1px solid $card;
-
-          @include darkmode {
-            border-left-color: $cardDark;
-          }
+          width: 12px;
+          border-top: 1px dashed rgba(110, 110, 120, 0.45);
         }
       }
     }
