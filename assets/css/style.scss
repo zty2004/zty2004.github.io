@@ -1191,6 +1191,95 @@ footer {
 }
 
 /*********************/
+/* SEARCH            */
+/*********************/
+
+.search-page {
+  .search-input {
+    width: 100%;
+    padding: 12px 18px;
+    font-size: 17px;
+    font-family: $helvetica;
+    color: $darkGray;
+    background: $card;
+    border: 1.5px solid $border;
+    border-radius: 12px;
+    box-shadow: $shadowSm;
+    outline: none;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+
+    &:focus {
+      border-color: rgba(91, 127, 199, 0.55);
+      box-shadow: 0 0 0 3px rgba(91, 127, 199, 0.15);
+    }
+
+    @include darkmode {
+      background: $cardDark;
+      border-color: $borderDark;
+      color: $textDark;
+    }
+  }
+
+  .search-results {
+    margin-top: 22px;
+  }
+
+  .search-hit {
+    display: block;
+    padding: 16px 20px;
+    margin-bottom: 14px;
+    background: $card;
+    border: 1px solid $border;
+    border-radius: 12px;
+    box-shadow: $shadowSm;
+    color: inherit;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: $shadowMd;
+    }
+
+    h3 {
+      margin: 0 0 4px;
+      font-size: 18px;
+      color: $monetDeep;
+
+      @include darkmode { color: $monetSky; }
+    }
+
+    @include darkmode {
+      background: $cardDark;
+      border-color: $borderDark;
+    }
+  }
+
+  .search-snippet {
+    margin: 8px 0 0;
+    font-size: 14px;
+    color: $gray;
+    line-height: 1.7;
+  }
+
+  .search-hint {
+    color: $gray;
+    text-align: center;
+    padding: 30px 0;
+  }
+
+  mark {
+    background: rgba(242, 199, 119, 0.55);
+    color: inherit;
+    border-radius: 3px;
+    padding: 0 2px;
+
+    @include darkmode {
+      background: rgba(222, 118, 74, 0.4);
+    }
+  }
+}
+
+/*********************/
 /* LIGHTBOX          */
 /*********************/
 
