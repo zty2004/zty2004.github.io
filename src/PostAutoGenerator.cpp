@@ -17,14 +17,13 @@ int main() {
             << std::endl;
 
     for (auto const& dir_entry : fs::directory_iterator{cwd}) {  // iterate the dir
-        outfile << "![pic" << ++fid << "]"
-                << "({{site.baseurl}}/" 
+        outfile << "<img src=\"{{site.baseurl}}/"
                 << cwd.parent_path().filename().string() << "/"
                 << cwd.filename().string() << "/"
-                << dir_entry.path().filename().string() << ")" << std::endl
+                << dir_entry.path().filename().string()
+                << "\" alt=\"pic" << ++fid << "\" loading=\"lazy\" decoding=\"async\">" << std::endl
                 << std::endl;
     }
     outfile.close();
-    system("rm PostAutoGenerator");  // delete the file itself
     return 0;
 }

@@ -3,163 +3,163 @@ layout: post
 title: 2024-1-28-Switzerland
 ---
 
-![pic1]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_112007.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_112007.jpg" alt="pic1" loading="lazy" decoding="async">
 
-![pic2]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_123816.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_123816.jpg" alt="pic2" loading="lazy" decoding="async">
 
-![pic3]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_124225.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_124225.jpg" alt="pic3" loading="lazy" decoding="async">
 
-![pic4]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_124726.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_124726.jpg" alt="pic4" loading="lazy" decoding="async">
 
-![pic5]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_124755.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_124755.jpg" alt="pic5" loading="lazy" decoding="async">
 
-![pic6]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_124901.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_124901.jpg" alt="pic6" loading="lazy" decoding="async">
 
-![pic7]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_125127.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_125127.jpg" alt="pic7" loading="lazy" decoding="async">
 
-![pic8]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_125335.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_125335.jpg" alt="pic8" loading="lazy" decoding="async">
 
-![pic9]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_125406.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_125406.jpg" alt="pic9" loading="lazy" decoding="async">
 
-![pic10]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_125827.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_125827.jpg" alt="pic10" loading="lazy" decoding="async">
 
-![pic11]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_125919.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_125919.jpg" alt="pic11" loading="lazy" decoding="async">
 
-![pic12]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_130109.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_130109.jpg" alt="pic12" loading="lazy" decoding="async">
 
-![pic13]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_130446.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_130446.jpg" alt="pic13" loading="lazy" decoding="async">
 
-![pic14]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_131348.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_131348.jpg" alt="pic14" loading="lazy" decoding="async">
 
-![pic15]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_131353.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_131353.jpg" alt="pic15" loading="lazy" decoding="async">
 
-![pic16]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_131404.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_131404.jpg" alt="pic16" loading="lazy" decoding="async">
 
-![pic17]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_131643.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_131643.jpg" alt="pic17" loading="lazy" decoding="async">
 
-![pic18]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_131707.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_131707.jpg" alt="pic18" loading="lazy" decoding="async">
 
-![pic19]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_132158.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_132158.jpg" alt="pic19" loading="lazy" decoding="async">
 
-![pic20]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_140821.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_140821.jpg" alt="pic20" loading="lazy" decoding="async">
 
-![pic21]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_140837.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_140837.jpg" alt="pic21" loading="lazy" decoding="async">
 
-![pic22]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_140842.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_140842.jpg" alt="pic22" loading="lazy" decoding="async">
 
-![pic23]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_141131.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_141131.jpg" alt="pic23" loading="lazy" decoding="async">
 
-![pic24]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_144243.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_144243.jpg" alt="pic24" loading="lazy" decoding="async">
 
-![pic25]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_144308.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_144308.jpg" alt="pic25" loading="lazy" decoding="async">
 
-![pic26]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_144341.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_144341.jpg" alt="pic26" loading="lazy" decoding="async">
 
-![pic27]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_144400.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_144400.jpg" alt="pic27" loading="lazy" decoding="async">
 
-![pic28]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_144533.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_144533.jpg" alt="pic28" loading="lazy" decoding="async">
 
-![pic29]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_144721.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_144721.jpg" alt="pic29" loading="lazy" decoding="async">
 
-![pic30]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_145216.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_145216.jpg" alt="pic30" loading="lazy" decoding="async">
 
-![pic31]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_145808.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_145808.jpg" alt="pic31" loading="lazy" decoding="async">
 
-![pic32]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_150236.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_150236.jpg" alt="pic32" loading="lazy" decoding="async">
 
-![pic33]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_150447.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_150447.jpg" alt="pic33" loading="lazy" decoding="async">
 
-![pic34]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_150818.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_150818.jpg" alt="pic34" loading="lazy" decoding="async">
 
-![pic35]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_150822.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_150822.jpg" alt="pic35" loading="lazy" decoding="async">
 
-![pic36]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_151541.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_151541.jpg" alt="pic36" loading="lazy" decoding="async">
 
-![pic37]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_154614.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_154614.jpg" alt="pic37" loading="lazy" decoding="async">
 
-![pic38]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_154906.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_154906.jpg" alt="pic38" loading="lazy" decoding="async">
 
-![pic39]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_160010.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_160010.jpg" alt="pic39" loading="lazy" decoding="async">
 
-![pic40]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_163959.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_163959.jpg" alt="pic40" loading="lazy" decoding="async">
 
-![pic41]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_164015.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_164015.jpg" alt="pic41" loading="lazy" decoding="async">
 
-![pic42]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_164127.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_164127.jpg" alt="pic42" loading="lazy" decoding="async">
 
-![pic43]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_164134.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_164134.jpg" alt="pic43" loading="lazy" decoding="async">
 
-![pic44]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_164258.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_164258.jpg" alt="pic44" loading="lazy" decoding="async">
 
-![pic45]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_164308.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_164308.jpg" alt="pic45" loading="lazy" decoding="async">
 
-![pic46]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_164320.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_164320.jpg" alt="pic46" loading="lazy" decoding="async">
 
-![pic47]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_164601.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_164601.jpg" alt="pic47" loading="lazy" decoding="async">
 
-![pic48]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_165741.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_165741.jpg" alt="pic48" loading="lazy" decoding="async">
 
-![pic49]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_172107.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_172107.jpg" alt="pic49" loading="lazy" decoding="async">
 
-![pic50]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_172417.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_172417.jpg" alt="pic50" loading="lazy" decoding="async">
 
-![pic51]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_173912.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_173912.jpg" alt="pic51" loading="lazy" decoding="async">
 
-![pic52]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_174826.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_174826.jpg" alt="pic52" loading="lazy" decoding="async">
 
-![pic53]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_084427.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_084427.jpg" alt="pic53" loading="lazy" decoding="async">
 
-![pic54]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_101054.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_101054.jpg" alt="pic54" loading="lazy" decoding="async">
 
-![pic55]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_125459.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_125459.jpg" alt="pic55" loading="lazy" decoding="async">
 
-![pic56]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_144303.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_144303.jpg" alt="pic56" loading="lazy" decoding="async">
 
-![pic57]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_163040.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_163040.jpg" alt="pic57" loading="lazy" decoding="async">
 
-![pic58]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_101110.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_101110.jpg" alt="pic58" loading="lazy" decoding="async">
 
-![pic59]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_101517.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_101517.jpg" alt="pic59" loading="lazy" decoding="async">
 
-![pic60]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_101623.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_101623.jpg" alt="pic60" loading="lazy" decoding="async">
 
-![pic61]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_101912.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_101912.jpg" alt="pic61" loading="lazy" decoding="async">
 
-![pic62]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_101943.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_101943.jpg" alt="pic62" loading="lazy" decoding="async">
 
-![pic63]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_102858.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_102858.jpg" alt="pic63" loading="lazy" decoding="async">
 
-![pic64]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_102919.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_102919.jpg" alt="pic64" loading="lazy" decoding="async">
 
-![pic65]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_103030.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_103030.jpg" alt="pic65" loading="lazy" decoding="async">
 
-![pic66]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_104325.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_104325.jpg" alt="pic66" loading="lazy" decoding="async">
 
-![pic67]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_104509.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_104509.jpg" alt="pic67" loading="lazy" decoding="async">
 
-![pic68]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_104514.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_104514.jpg" alt="pic68" loading="lazy" decoding="async">
 
-![pic69]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_105420.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_105420.jpg" alt="pic69" loading="lazy" decoding="async">
 
-![pic70]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_105435.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_105435.jpg" alt="pic70" loading="lazy" decoding="async">
 
-![pic71]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_105744.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_105744.jpg" alt="pic71" loading="lazy" decoding="async">
 
-![pic72]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_111852.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_111852.jpg" alt="pic72" loading="lazy" decoding="async">
 
-![pic73]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_121906.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_121906.jpg" alt="pic73" loading="lazy" decoding="async">
 
-![pic74]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_122201.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_122201.jpg" alt="pic74" loading="lazy" decoding="async">
 
-![pic75]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_124122.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_124122.jpg" alt="pic75" loading="lazy" decoding="async">
 
-![pic76]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_134903.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_134903.jpg" alt="pic76" loading="lazy" decoding="async">
 
-![pic77]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_151055.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_151055.jpg" alt="pic77" loading="lazy" decoding="async">
 
-![pic78]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_151136.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_151136.jpg" alt="pic78" loading="lazy" decoding="async">
 
-![pic79]({{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_151344.jpg)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240128_151344.jpg" alt="pic79" loading="lazy" decoding="async">
 
-![pic80]({{site.baseurl}}/images/2024-1-28-Switzerland/PostAutoGenerator)
+<img src="{{site.baseurl}}/images/2024-1-28-Switzerland/PostAutoGenerator" alt="pic80" loading="lazy" decoding="async">
 
