@@ -263,6 +263,13 @@ img {
   height: auto;
 }
 
+// The HTML `hidden` attribute only carries a low-priority UA `display: none`,
+// which any author rule (e.g. `display: flex`) silently overrides. Enforce it
+// so JS toggling `el.hidden` actually hides things.
+[hidden] {
+  display: none !important;
+}
+
 // Photos inside posts — rounded, soft shadow, gentle lift on hover
 // (<picture> wrappers are transparent containers; style the inner img)
 .entry picture,
