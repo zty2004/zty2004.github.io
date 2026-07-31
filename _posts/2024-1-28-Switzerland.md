@@ -3,6 +3,7 @@ layout: post
 title: 2024-1-28-Switzerland
 tags: [travel, switzerland]
 thumb: /images/2024-1-28-Switzerland/thumb.jpg
+gallery: true
 ---
 
 <picture><source srcset="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_112007.webp" type="image/webp"><img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_112007.jpg" alt="pic1" loading="lazy" decoding="async" width="1600" height="1200"></picture>

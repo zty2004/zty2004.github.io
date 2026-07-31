@@ -3,6 +3,7 @@ layout: post
 title: Germany Day 01
 tags: [travel, germany]
 thumb: /images/2024-1-1-Germany-Day-01/thumb.jpg
+gallery: true
 ---
 
 经历了快一整天的飞行，终于到达了德国。

@@ -1210,6 +1210,132 @@ footer {
 }
 
 /*********************/
+/* GALLERY           */
+/*********************/
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 26px 0;
+
+  @media screen and (max-width: 900px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include mobile {
+    gap: 6px;
+  }
+}
+
+.gallery-item {
+  display: block;
+  padding: 0;
+  border: none;
+  background: none;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: zoom-in;
+  line-height: 0;
+
+  picture, img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    margin: 0;
+    border-radius: 0;
+    box-shadow: none;
+    transition: transform 0.4s ease;
+  }
+
+  &:hover img {
+    transform: scale(1.06);
+    box-shadow: none;
+  }
+}
+
+// full-screen viewer for gallery images
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(250, 246, 240, 0.96);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  &.open { display: flex; }
+
+  @include darkmode {
+    background: rgba(23, 27, 38, 0.96);
+  }
+
+  .lightbox-img {
+    max-width: 92vw;
+    max-height: 88vh;
+    margin: 0;
+    border-radius: 8px;
+    box-shadow: $shadowLg;
+    cursor: zoom-out;
+  }
+
+  button {
+    position: absolute;
+    background: transparent;
+    border: none;
+    color: $gray;
+    cursor: pointer;
+    transition: color 0.2s ease, transform 0.2s ease;
+
+    &:hover { color: $accentDark; }
+
+    @include darkmode {
+      color: $textDark;
+      &:hover { color: #f0a883; }
+    }
+  }
+
+  .lightbox-close {
+    top: 18px;
+    right: 22px;
+    font-size: 26px;
+    line-height: 1;
+  }
+
+  .lightbox-prev,
+  .lightbox-next {
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 54px;
+    line-height: 1;
+    padding: 0 14px;
+
+    &:hover { transform: translateY(-50%) scale(1.15); }
+  }
+
+  .lightbox-prev { left: 8px; }
+  .lightbox-next { right: 8px; }
+
+  .lightbox-count {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    color: $gray;
+    font-variant-numeric: tabular-nums;
+  }
+
+  @include mobile {
+    .lightbox-prev, .lightbox-next { font-size: 40px; }
+  }
+}
+
+/*********************/
 /* CODE COPY & TOC   */
 /*********************/
 

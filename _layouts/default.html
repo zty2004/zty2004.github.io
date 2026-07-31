@@ -143,7 +143,11 @@
     {% endif %}
 
     <script defer src="{{ site.baseurl }}/assets/js/post-enhance.js"></script>
+    {% if page.gallery %}
+    <script defer src="{{ site.baseurl }}/assets/js/gallery.js"></script>
+    {% endif %}
 
+    {% unless page.gallery %}
     <!-- Lightbox: medium-zoom is fetched on the first image click, not upfront -->
     <script>
       (function () {
@@ -185,6 +189,7 @@
         });
       })();
     </script>
+    {% endunless %}
 
     {% include analytics.html %}
   </body>
