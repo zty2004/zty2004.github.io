@@ -1,0 +1,88 @@
+---
+layout: default
+title: Search
+permalink: /search/
+---
+
+<div class="search-page">
+  <h1>🔍 Search</h1>
+
+  <input id="search-input" class="search-input" type="search"
+         placeholder="搜索文章标题、标签或正文…" autocomplete="off" autofocus />
+
+  <div id="search-results" class="search-results" aria-live="polite"></div>
+</div>
+
+<script>
+  (function () {
+    var input = document.getElementById('search-input');
+    var box = document.getElementById('search-results');
+    var index = null, loading = false, timer = null;
+
+    function loadIndex() {
+      if (index || loading) return;
+      loading = true;
+      fetch('{{ site.baseurl }}/search.json')
+        .then(function (r) { return r.json(); })
+        .then(function (data) { index = data; run(); })
+        .catch(function () { box.innerHTML = '<p class="search-hint">索引加载失败，请刷新重试</p>'; });
+    }
+
+    function esc(s) {
+      return s.replace(/[&<>"']/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      });
+    }
+
+    function highlight(text, q) {
+      var safe = esc(text);
+      var re = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+      return safe.replace(re, function (m) { return '<mark>' + m + '</mark>'; });
+    }
+
+    function run() {
+      var q = input.value.trim();
+      if (!q) { box.innerHTML = ''; return; }
+      if (!index) { loadIndex(); return; }
+
+      var ql = q.toLowerCase();
+      var hits = [];
+      index.forEach(function (p) {
+        var score = 0, where = -1;
+        if (p.title.toLowerCase().indexOf(ql) >= 0) score += 100;
+        if (p.tags.join(' ').toLowerCase().indexOf(ql) >= 0) score += 50;
+        where = p.content.toLowerCase().indexOf(ql);
+        if (where >= 0) score += 10;
+        if (score > 0) hits.push({ p: p, score: score, where: where });
+      });
+      hits.sort(function (a, b) { return b.score - a.score; });
+
+      if (!hits.length) {
+        box.innerHTML = '<p class="search-hint">没有找到「' + esc(q) + '」相关的文章</p>';
+        return;
+      }
+      box.innerHTML = hits.map(function (h) {
+        var snippet = '';
+        if (h.where >= 0) {
+          var start = Math.max(0, h.where - 40);
+          var end = Math.min(h.p.content.length, h.where + q.length + 40);
+          snippet = (start > 0 ? '…' : '') + h.p.content.slice(start, end) +
+                    (end < h.p.content.length ? '…' : '');
+          snippet = '<p class="search-snippet">' + highlight(snippet, q) + '</p>';
+        }
+        var tags = h.p.tags.map(function (t) {
+          return '<span class="post-tag">#' + esc(t) + '</span>';
+        }).join(' ');
+        return '<a class="search-hit" href="' + h.p.url + '">' +
+               '<h3>' + highlight(h.p.title, q) + '</h3>' +
+               '<span class="date">' + h.p.date + '</span> ' + tags + snippet + '</a>';
+      }).join('');
+    }
+
+    input.addEventListener('focus', loadIndex);
+    input.addEventListener('input', function () {
+      clearTimeout(timer);
+      timer = setTimeout(run, 300);
+    });
+  })();
+</script>
