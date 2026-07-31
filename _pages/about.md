@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Tianyou Zuo
-permalink: /tianyouzuo/
+permalink: /
 ---
 
 <div class="academic-home">
@@ -21,7 +21,7 @@ permalink: /tianyouzuo/
       <ul class="profile-links">
         <li><a href="mailto:fztym@sjtu.edu.cn">✉️ Email</a></li>
         <li><a href="https://github.com/zty2004" target="_blank" rel="noopener">GitHub</a></li>
-        <li><a href="{{ site.baseurl }}/">Blog</a></li>
+        <li><a href="{{ site.baseurl }}/blogs/">Blog</a></li>
         <!-- Restore these once the links are ready:
         <li><a href="#" target="_blank" rel="noopener">Google Scholar</a></li>
         <li><a href="#" target="_blank" rel="noopener">CV</a></li>
@@ -101,7 +101,7 @@ permalink: /tianyouzuo/
     <h2>🌸 Misc</h2>
     <p>
       Outside research, I enjoy traveling and photography — check out my
-      <a href="{{ site.baseurl }}/">travel blog</a> about Germany and Switzerland.
+      <a href="{{ site.baseurl }}/blogs/">travel blog</a> about Germany and Switzerland.
     </p>
   </section>
 

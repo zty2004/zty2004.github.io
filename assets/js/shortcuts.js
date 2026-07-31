@@ -51,10 +51,10 @@
 
   var HELP = [
     ['/', 'Search'],
-    ['g h', 'Go to blog home'],
+    ['g h', 'Go to home (profile)'],
+    ['g b', 'Go to blog'],
     ['g t', 'Go to tags'],
     ['g s', 'Go to search'],
-    ['g a', 'Go to about'],
     ['j / k', 'Next / previous heading'],
     ['t', 'Toggle light / dark theme'],
     ['c', 'Collapse / expand the table of contents'],
@@ -120,9 +120,9 @@
         pending = null;
         clearTimeout(timer);
         if (e.key === 'h') { go(''); return; }
+        if (e.key === 'b') { go('blogs/'); return; }
         if (e.key === 't') { go('tags/'); return; }
         if (e.key === 's') { go('search/'); return; }
-        if (e.key === 'a') { go('tianyouzuo/'); return; }
         return;
       }
 
