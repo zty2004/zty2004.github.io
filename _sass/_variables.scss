@@ -55,8 +55,10 @@ $shadowLg: 0 14px 40px rgba(20, 20, 30, 0.14);
   }
 }
 
+// Dark mode — driven by html[data-theme] so it can be toggled manually;
+// the initial value follows the system preference (set by inline JS in <head>)
 @mixin darkmode {
-  @media (prefers-color-scheme: dark) {
+  html[data-theme="dark"] & {
     @content;
   }
 }
