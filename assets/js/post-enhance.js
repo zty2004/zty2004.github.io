@@ -31,7 +31,9 @@
     });
 
     // ---------- 2. table of contents (collapsible tree) ----------
-    if (document.querySelector('.posts')) return; // index page: skip
+    // Only real post pages: on the post list every card is also an
+    // <article class="post"> wrapping an .entry, so rely on the body layout class.
+    if (!document.body.classList.contains('layout-post')) return;
     var entry = document.querySelector('article.post > .entry');
     if (!entry) return;
     var heads = Array.prototype.slice.call(entry.querySelectorAll('h2, h3, h4'));
