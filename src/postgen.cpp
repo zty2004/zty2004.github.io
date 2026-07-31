@@ -185,6 +185,42 @@ static string extractH1(string& body) {
     return title;
 }
 
+// If the body still contains fence-outside H1s, shift ALL headings down one
+// level (h1->h2, h2->h3, ..., capped at h6) so parent/child structure is kept
+// and the right-side TOC tree — which roots at h2 — captures every section.
+static string demoteExtraH1(const string& body) {
+    // pass 1: is there any h1 outside code fences?
+    {
+        std::istringstream in(body);
+        string line;
+        bool fence = false, hasH1 = false;
+        while (std::getline(in, line)) {
+            string t = trim(line);
+            if (t.rfind("```", 0) == 0 || t.rfind("~~~", 0) == 0) fence = !fence;
+            else if (!fence && line.rfind("# ", 0) == 0) hasH1 = true;
+        }
+        if (!hasH1) return body;
+    }
+    // pass 2: shift every heading down one level
+    std::istringstream in(body);
+    std::ostringstream out;
+    string line;
+    bool fence = false, first = true;
+    while (std::getline(in, line)) {
+        if (!first) out << "\n";
+        first = false;
+        string t = trim(line);
+        if (t.rfind("```", 0) == 0 || t.rfind("~~~", 0) == 0) fence = !fence;
+        size_t hashes = 0;
+        while (!fence && hashes < line.size() && line[hashes] == '#') ++hashes;
+        if (!fence && hashes >= 1 && hashes < 6 && hashes < line.size() && line[hashes] == ' ')
+            out << "#" << line;
+        else
+            out << line;
+    }
+    return out.str();
+}
+
 static string texTitle(const string& tex) {
     std::smatch m;
     if (std::regex_search(tex, m, std::regex(R"(\\title\{([^}]*)\})")))
@@ -397,6 +433,7 @@ int main(int argc, char** argv) {
         auto [stripped, fmTitle] = stripFrontMatter(readFile(input));
         body = stripped;
         string h1 = extractH1(body);
+        body = demoteExtraH1(body);
         if (title.empty()) title = !fmTitle.empty() ? fmTitle : h1;
         if (body.find("$$") != string::npos) math = true;
     } else if (ext == ".tex") {
@@ -408,8 +445,9 @@ int main(int argc, char** argv) {
         fs::path tmp = fs::temp_directory_path() / "postgen_pandoc.md";
         // -tex_math_gfm: forbid ```math fences / $`..`$ (kramdown can't render them);
         // +tex_math_dollars: emit $...$ / $$...$$, later promoted to site-standard $$
-        string cmd = "pandoc -f latex -t gfm-tex_math_gfm+tex_math_dollars " + shellQuote(input.string()) +
-                     " -o " + shellQuote(tmp.string());
+        // --shift-heading-level-by=1: \section -> h2, matching the TOC tree root
+        string cmd = "pandoc -f latex -t gfm-tex_math_gfm+tex_math_dollars --shift-heading-level-by=1 " +
+                     shellQuote(input.string()) + " -o " + shellQuote(tmp.string());
         if (std::system(cmd.c_str()) != 0) {
             std::cerr << "postgen: pandoc failed to convert " << input.filename().string() << "\n";
             return 1;
