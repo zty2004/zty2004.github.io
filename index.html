@@ -17,9 +17,18 @@ layout: default
       </span>
       {% endif %}
 
+      {% if post.thumb %}
+      <a class="card-thumb" href="{{ site.baseurl }}{{ post.url }}">
+        <img src="{{ site.baseurl }}{{ post.thumb }}" alt="{{ post.title }}" loading="lazy" decoding="async">
+      </a>
+      <div class="entry entry-text">
+        {{ post.excerpt | strip_html | truncate: 120 }}
+      </div>
+      {% else %}
       <div class="entry">
         {{ post.excerpt }}
       </div>
+      {% endif %}
 
       <a href="{{ site.baseurl }}{{ post.url }}" class="read-more">Read More</a>
     </article>
