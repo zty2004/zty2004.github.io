@@ -1,0 +1,46 @@
+---
+layout: null
+permalink: /feed.xml
+---
+{%- comment -%}
+  Hand-rolled RSS 2.0 feed. jekyll-feed still emits an Atom feed at
+  /feed-atom.xml, but its output keeps relative image paths, which break in most
+  readers. Here every image URL is absolutised and <picture> wrappers are
+  flattened to plain <img>, since few readers understand <picture>.
+{%- endcomment -%}
+{%- assign root = site.url | append: site.baseurl -%}
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>{{ site.name | xml_escape }}</title>
+    <description>{{ site.description | xml_escape }}</description>
+    <link>{{ root }}/</link>
+    <atom:link href="{{ root }}/feed.xml" rel="self" type="application/rss+xml" />
+    <language>zh-CN</language>
+    <lastBuildDate>{{ site.time | date_to_rfc822 }}</lastBuildDate>
+    <generator>Jekyll {{ jekyll.version }}</generator>
+    {%- for post in site.posts limit: 20 %}
+    <item>
+      <title>{{ post.title | xml_escape }}</title>
+      <link>{{ post.url | prepend: root }}</link>
+      <guid isPermaLink="true">{{ post.url | prepend: root }}</guid>
+      <pubDate>{{ post.date | date_to_rfc822 }}</pubDate>
+      {%- for tag in post.tags %}
+      <category>{{ tag | xml_escape }}</category>
+      {%- endfor %}
+      {%- comment -%}
+        1. absolutise src/srcset/href that start at the site root
+        2. unwrap <picture>: readers fall back to the inner <img>
+      {%- endcomment -%}
+      {%- assign body = post.content
+            | replace: 'src="/', 'src="{{ROOT}}/'
+            | replace: 'srcset="/', 'srcset="{{ROOT}}/'
+            | replace: 'href="/', 'href="{{ROOT}}/'
+            | replace: '{{ROOT}}', root
+            | replace: '<picture>', ''
+            | replace: '</picture>', '' -%}
+      <description>{{ body | xml_escape }}</description>
+    </item>
+    {%- endfor %}
+  </channel>
+</rss>
