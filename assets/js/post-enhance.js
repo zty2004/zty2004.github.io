@@ -28,11 +28,11 @@
       block.appendChild(btn);
     });
 
-    // ---------- 2. table of contents ----------
+    // ---------- 2. table of contents (collapsible tree) ----------
     if (document.querySelector('.posts')) return; // index page: skip
     var entry = document.querySelector('article.post > .entry');
     if (!entry) return;
-    var heads = entry.querySelectorAll('h2, h3');
+    var heads = Array.prototype.slice.call(entry.querySelectorAll('h2, h3, h4'));
     if (heads.length < 3) return;
 
     // unique, CJK-friendly ids
@@ -47,44 +47,110 @@
       h.id = slug;
     });
 
-    function buildList() {
-      var ul = document.createElement('ul');
+    // nest headings into a tree by level (h2 > h3 > h4)
+    function buildTree() {
+      var root = { level: 1, children: [] };
+      var stack = [root];
       heads.forEach(function (h) {
+        var node = { h: h, level: +h.tagName[1], children: [] };
+        while (stack[stack.length - 1].level >= node.level) stack.pop();
+        stack[stack.length - 1].children.push(node);
+        stack.push(node);
+      });
+      return root;
+    }
+
+    // collapsible=true renders fold toggles; false renders a plain nested list
+    function renderList(nodes, collapsible) {
+      var ul = document.createElement('ul');
+      nodes.forEach(function (n) {
         var li = document.createElement('li');
-        li.className = 'toc-' + h.tagName.toLowerCase();
+        li.className = 'toc-' + n.h.tagName.toLowerCase();
+        var row = document.createElement('div');
+        row.className = 'toc-row';
+
+        if (collapsible) {
+          if (n.children.length) {
+            var tg = document.createElement('button');
+            tg.type = 'button';
+            tg.className = 'toc-toggle';
+            tg.setAttribute('aria-label', 'toggle section');
+            tg.textContent = '▸';
+            tg.addEventListener('click', function (e) {
+              e.stopPropagation();
+              li.classList.toggle('open');
+            });
+            row.appendChild(tg);
+          } else {
+            var pad = document.createElement('span');
+            pad.className = 'toc-toggle toc-pad';
+            row.appendChild(pad);
+          }
+        }
+
         var a = document.createElement('a');
-        a.href = '#' + h.id;
-        a.textContent = h.textContent;
-        li.appendChild(a);
+        a.href = '#' + n.h.id;
+        a.textContent = n.h.textContent;
+        row.appendChild(a);
+        li.appendChild(row);
+        if (n.children.length) li.appendChild(renderList(n.children, collapsible));
         ul.appendChild(li);
       });
       return ul;
     }
 
-    // desktop: floating sidebar
+    var tree = buildTree();
+
+    // desktop: floating sidebar, top level visible, deeper levels fold out;
+    // the whole panel can also be minimized (state remembered)
     var aside = document.createElement('nav');
     aside.className = 'toc';
-    aside.innerHTML = '<div class="toc-title">目录</div>';
-    aside.appendChild(buildList());
+    var titleBar = document.createElement('div');
+    titleBar.className = 'toc-title';
+    titleBar.innerHTML = '<span>目录</span>';
+    var fold = document.createElement('button');
+    fold.type = 'button';
+    fold.className = 'toc-fold';
+    fold.title = '折叠/展开目录';
+    titleBar.appendChild(fold);
+    aside.appendChild(titleBar);
+    aside.appendChild(renderList(tree.children, true));
     document.body.appendChild(aside);
 
-    // mobile: collapsible list above the content
+    function setFolded(folded) {
+      aside.classList.toggle('collapsed', folded);
+      fold.textContent = folded ? '☰' : '−';
+      try { localStorage.setItem('tocCollapsed', folded ? '1' : ''); } catch (e) {}
+    }
+    var saved = false;
+    try { saved = localStorage.getItem('tocCollapsed') === '1'; } catch (e) {}
+    setFolded(saved);
+    fold.addEventListener('click', function () {
+      setFolded(!aside.classList.contains('collapsed'));
+    });
+
+    // mobile: collapsible list above the content (fully expanded inside)
     var details = document.createElement('details');
     details.className = 'toc-mobile';
     details.innerHTML = '<summary>目录</summary>';
-    details.appendChild(buildList());
+    details.appendChild(renderList(tree.children, false));
     entry.parentNode.insertBefore(details, entry);
 
-    // highlight the section currently in view
+    // highlight the section in view and unfold its ancestors
     var links = aside.querySelectorAll('a');
     var byId = {};
     links.forEach(function (a) { byId[decodeURIComponent(a.hash.slice(1))] = a; });
     var observer = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
-        if (e.isIntersecting) {
-          links.forEach(function (a) { a.classList.remove('active'); });
-          var a = byId[e.target.id];
-          if (a) a.classList.add('active');
+        if (!e.isIntersecting) return;
+        var a = byId[e.target.id];
+        if (!a) return;
+        links.forEach(function (x) { x.classList.remove('active'); });
+        a.classList.add('active');
+        var li = a.closest('li');
+        while (li) {
+          li.classList.add('open');
+          li = li.parentElement ? li.parentElement.closest('li') : null;
         }
       });
     }, { rootMargin: '-90px 0px -70% 0px' });
