@@ -9,6 +9,8 @@
     document.querySelectorAll('div.highlight').forEach(function (block) {
       var pre = block.querySelector('pre');
       if (!pre) return;
+      // mermaid fences are replaced by diagrams, not code to copy
+      if (block.className.indexOf('language-mermaid') >= 0) return;
       block.classList.add('has-copy');
 
       var btn = document.createElement('button');

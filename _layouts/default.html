@@ -143,6 +143,9 @@
     {% endif %}
 
     <script defer src="{{ site.baseurl }}/assets/js/post-enhance.js"></script>
+    {% if page.mermaid %}
+    <script type="module" src="{{ site.baseurl }}/assets/js/mermaid-init.js"></script>
+    {% endif %}
     {% if page.gallery %}
     <script defer src="{{ site.baseurl }}/assets/js/gallery.js"></script>
     {% endif %}

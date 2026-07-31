@@ -1210,6 +1210,40 @@ footer {
 }
 
 /*********************/
+/* MERMAID           */
+/*********************/
+
+.mermaid-figure {
+  margin: 26px 0;
+  padding: 18px 12px;
+  text-align: center;
+  overflow-x: auto;
+  background: $card;
+  border: 1px solid $border;
+  border-radius: 12px;
+  box-shadow: $shadowSm;
+
+  svg {
+    max-width: 100%;
+    height: auto;
+  }
+
+  @include darkmode {
+    background: $cardDark;
+    border-color: $borderDark;
+  }
+
+  .mermaid-error {
+    text-align: left;
+    font-size: 13px;
+    color: $accentDark;
+    background: none;
+    border: none;
+    box-shadow: none;
+  }
+}
+
+/*********************/
 /* GALLERY           */
 /*********************/
 
