@@ -248,6 +248,9 @@ strong, b {
 
 img {
   max-width: 100%;
+  // with explicit width/height attributes (CLS fix), height MUST fall back to
+  // auto so downscaled images keep their intrinsic aspect ratio
+  height: auto;
 }
 
 // Photos inside posts — rounded, soft shadow, gentle lift on hover
