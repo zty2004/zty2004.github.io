@@ -630,6 +630,39 @@ nav {
       &:hover { transform: none; box-shadow: $shadowMd; }
     }
   }
+
+  // thumb-based cards: plain text teaser, no clamp/fade needed
+  .entry-text {
+    max-height: none;
+    color: $gray;
+    font-size: 15px;
+    line-height: 1.7;
+
+    &::after { display: none; }
+  }
+
+  // 16:9 cover thumbnail
+  .card-thumb {
+    display: block;
+    margin: 14px 0 4px;
+    border-radius: 12px;
+    overflow: hidden;
+
+    img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      margin: 0;
+      border-radius: 0;
+      box-shadow: none;
+      transition: transform 0.4s ease;
+    }
+
+    &:hover img {
+      transform: scale(1.04);
+    }
+  }
 }
 
 .post {
