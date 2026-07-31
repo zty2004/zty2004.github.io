@@ -15,6 +15,7 @@
 //   --math           force `math: true` in front matter
 //   --force          overwrite an existing post
 //   --dry-run        print what would happen without writing anything
+//   --publish        git add + commit + push the generated files
 
 #include <array>
 #include <cctype>
@@ -44,13 +45,14 @@ struct Options {
     bool math = false;
     bool force = false;
     bool dryRun = false;
+    bool publish = false;
 };
 
 [[noreturn]] static void usage(int code) {
     std::cerr <<
         "usage: postgen <file.md|file.tex|file.pdf> [options]\n"
         "       postgen --photos <dir> [options]\n"
-        "options: --title \"...\" --tags a,b --date YYYY-M-D --math --force --dry-run\n";
+        "options: --title \"...\" --tags a,b --date YYYY-M-D --math --force --dry-run --publish\n";
     std::exit(code);
 }
 
@@ -73,6 +75,7 @@ static Options parseArgs(int argc, char** argv) {
         else if (a == "--math")    o.math = true;
         else if (a == "--force")   o.force = true;
         else if (a == "--dry-run") o.dryRun = true;
+        else if (a == "--publish") o.publish = true;
         else if (a == "-h" || a == "--help") usage(0);
         else if (!a.empty() && a[0] == '-') {
             std::cerr << "postgen: unknown option " << a << "\n";
@@ -453,12 +456,31 @@ int main(int argc, char** argv) {
 
     string post = buildFrontMatter(title, opt.tags, math) + trim(body) + "\n";
 
+    // paths to hand to git when --publish is set
+    std::vector<string> publishPaths{"_posts/" + postName + ".md"};
+    if (!ctx.usedNames.empty()) publishPaths.push_back(ctx.imgDirRel);
+    if (!opt.photosMode && ext == ".pdf") publishPaths.push_back("assets/pdf/" + postName + ".pdf");
+
     // ---- emit ----
     if (opt.dryRun) {
         std::cout << "\n--- would write " << postPath.string() << " ---\n" << post;
+        if (opt.publish) std::cout << "--- would publish (git add/commit/push) ---\n";
         return 0;
     }
     std::ofstream(postPath, std::ios::binary) << post;
     std::cout << "created " << postPath.string() << "\n";
+
+    if (opt.publish) {
+        string git = "git -C " + shellQuote(repoRoot.string());
+        string add = git + " add";
+        for (const auto& p : publishPaths) add += " " + shellQuote(p);
+        if (std::system(add.c_str()) != 0 ||
+            std::system((git + " commit -m " + shellQuote("post. " + title)).c_str()) != 0 ||
+            std::system((git + " push").c_str()) != 0) {
+            std::cerr << "postgen: publish failed — post was generated, fix git state and push manually\n";
+            return 1;
+        }
+        std::cout << "published \"" << title << "\" (GitHub Pages will rebuild shortly)\n";
+    }
     return 0;
 }
