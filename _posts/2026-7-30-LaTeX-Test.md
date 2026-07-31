@@ -3,6 +3,7 @@ layout: post
 title: Feature Test — Math, TOC & Code
 tags: [math, test]
 math: true
+mermaid: true
 ---
 
 This post exercises three site features at once: MathJax rendering, the
@@ -124,6 +125,39 @@ labore et dolore magna aliqua.
 
 More filler text. Ut enim ad minim veniam, quis nostrud exercitation
 ullamco laboris nisi ut aliquip ex ea commodo consequat.
+
+## Diagrams (Mermaid)
+
+Declare `mermaid: true` in the front matter, then open a fenced block tagged
+`mermaid`. Diagrams re-render when the light/dark switch is flipped.
+
+### Flowchart
+
+```mermaid
+flowchart LR
+    A[Markdown / LaTeX / PDF] --> B{postgen}
+    B -->|images| C[compress + WebP]
+    B -->|front matter| D[title, tags, thumb]
+    C --> E[_posts + images]
+    D --> E
+    E --> F[GitHub Pages build]
+    F --> G([Live site])
+```
+
+### Sequence diagram
+
+```mermaid
+sequenceDiagram
+    participant U as Reader
+    participant P as Page
+    participant C as CDN
+    U->>P: open post
+    P->>P: render text (no blocking JS)
+    U->>P: click a photo
+    P->>C: fetch lightbox script
+    C-->>P: medium-zoom
+    P-->>U: zoomed image
+```
 
 ## Writing Conventions
 
