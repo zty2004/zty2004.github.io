@@ -44,8 +44,17 @@
     // must stay navigable with the arrow keys too.
     var items = Array.prototype.slice.call(entry.querySelectorAll('img'));
 
+    // Photo-only posts get the loose, hand-laid wall. Posts that mix prose with
+    // photos keep the plain vertical flow so pictures stay next to the text
+    // that discusses them — only the lightbox is added there.
+    var proseLength = 0;
+    children.forEach(function (node) {
+      if (!imageOf(node)) proseLength += node.textContent.trim().length;
+    });
+    var photoOnly = proseLength < 40 && items.length >= 4;
+
     var builtGrids = [];
-    grids.forEach(function (group) {
+    if (photoOnly) grids.forEach(function (group) {
       var grid = document.createElement('div');
       grid.className = 'gallery';
       entry.insertBefore(grid, group[0]);
@@ -71,6 +80,16 @@
     var ROW = 6;   // grid-auto-rows, px  (keep in sync with the stylesheet)
     var GAP = 10;  // gallery gap, px
 
+    // Zoom, Photos.app style: fewer columns = bigger photos. Pinch on a
+    // trackpad/touchscreen, Cmd/Ctrl + wheel, or the +/− buttons.
+    var MIN_COLS = 1, MAX_COLS = 8;
+    var narrow = !!(window.matchMedia && window.matchMedia('(max-width: 900px)').matches);
+    var cols = narrow ? 2 : 3;
+    try {
+      var saved = parseInt(localStorage.getItem('galleryCols'), 10);
+      if (saved >= MIN_COLS && saved <= MAX_COLS) cols = saved;
+    } catch (e) {}
+
     function ratioOf(img) {
       var w = parseFloat(img.getAttribute('width')) || img.naturalWidth || 4;
       var h = parseFloat(img.getAttribute('height')) || img.naturalHeight || 3;
@@ -85,7 +104,6 @@
 
     function layout(grid) {
       var cells = Array.prototype.slice.call(grid.children);
-      var cols = getComputedStyle(grid).gridTemplateColumns.split(' ').length;
       var colW = (grid.clientWidth - GAP * (cols - 1)) / cols;
       if (!colW || colW < 1) return;
 
@@ -97,15 +115,71 @@
         var h = slotW * ratioOf(cell.querySelector('img'));
         cell.style.gridRowEnd = 'span ' + Math.max(2, Math.round((h + GAP) / (ROW + GAP)));
 
-        // tilt: -1.6deg .. +1.6deg, plus a hair of vertical drift
-        var tilt = (jitter(i + 100) - 0.5) * 3.2;
-        var drift = (jitter(i + 200) - 0.5) * 5;
+        // tilt: -1.6deg .. +1.6deg, plus a hair of vertical drift.
+        // A single-column view is "inspect one photo" mode — keep those straight.
+        var tilt = cols === 1 ? 0 : (jitter(i + 100) - 0.5) * 3.2;
+        var drift = cols === 1 ? 0 : (jitter(i + 200) - 0.5) * 5;
         cell.style.setProperty('--tilt', tilt.toFixed(2) + 'deg');
         cell.style.setProperty('--drift', drift.toFixed(1) + 'px');
       });
     }
 
     function layoutAll() { builtGrids.forEach(layout); }
+
+    function setCols(n, zoomEl) {
+      n = Math.min(MAX_COLS, Math.max(MIN_COLS, n));
+      if (n === cols) return;
+      cols = n;
+      try { localStorage.setItem('galleryCols', String(cols)); } catch (e) {}
+      builtGrids.forEach(function (g) { g.style.setProperty('--cols', cols); });
+      layoutAll();
+      if (zoomEl) zoomEl.textContent = cols;
+    }
+
+    builtGrids.forEach(function (grid) {
+      grid.style.setProperty('--cols', cols);
+
+      // --- zoom controls (discoverability for the gesture) ---
+      var bar = document.createElement('div');
+      bar.className = 'gallery-zoom';
+      bar.innerHTML =
+        '<button type="button" class="gz-out" aria-label="Show more photos">−</button>' +
+        '<span class="gz-value">' + cols + '</span>' +
+        '<button type="button" class="gz-in" aria-label="Show bigger photos">+</button>' +
+        '<span class="gz-hint">双指捏合或 ⌘/Ctrl + 滚轮缩放</span>';
+      grid.parentNode.insertBefore(bar, grid);
+      var valueEl = bar.querySelector('.gz-value');
+
+      bar.querySelector('.gz-in').addEventListener('click', function () { setCols(cols - 1, valueEl); });
+      bar.querySelector('.gz-out').addEventListener('click', function () { setCols(cols + 1, valueEl); });
+
+      // --- trackpad pinch / Cmd+wheel: the browser reports ctrlKey ---
+      grid.addEventListener('wheel', function (e) {
+        if (!e.ctrlKey && !e.metaKey) return;   // plain scrolling must still scroll
+        e.preventDefault();
+        setCols(cols + (e.deltaY > 0 ? 1 : -1), valueEl);
+      }, { passive: false });
+
+      // --- touchscreen pinch ---
+      var startDist = 0, startCols = cols;
+      function spread(t) {
+        var dx = t[0].clientX - t[1].clientX, dy = t[0].clientY - t[1].clientY;
+        return Math.sqrt(dx * dx + dy * dy);
+      }
+      grid.addEventListener('touchstart', function (e) {
+        if (e.touches.length !== 2) return;
+        startDist = spread(e.touches);
+        startCols = cols;
+      }, { passive: true });
+      grid.addEventListener('touchmove', function (e) {
+        if (e.touches.length !== 2 || !startDist) return;
+        e.preventDefault();
+        var scale = spread(e.touches) / startDist;
+        setCols(Math.round(startCols / scale), valueEl);
+      }, { passive: false });
+      grid.addEventListener('touchend', function () { startDist = 0; }, { passive: true });
+    });
+
     layoutAll();
 
     // re-flow on resize (column count and width both change)
