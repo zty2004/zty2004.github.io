@@ -11,7 +11,7 @@ Personal homepage & blog of **Tianyou Zuo (fztym)** — built with [Jekyll](http
 - 🎓 **Academic homepage as the landing page** — profile, news, research interests and education timeline at `/`; the post list lives at `/blogs/`
 - 🏷️ **Tags** — multi-select filtering (AND / OR) with shareable URLs at `/tags/`
 - 🔍 **Search** — client-side full-text search at `/search/`, index fetched on demand, CJK-friendly
-- 🖼️ **Photo galleries** — consecutive photos become a grid; every image in a post opens in a lightbox with ←/→ navigation and swipe support
+- 🖼️ **Adaptive photo layouts** — photo-only posts become a loosely hand-laid wall (real aspect ratios, gentle tilt) with Photos.app-style pinch / ⌘-wheel zoom from 1 to 8 across; posts that mix prose and photos pack each run of photos into tidy justified rows. Every image opens in a lightbox with ←/→ navigation and swipe support
 - 🧮 **LaTeX math** — MathJax 3 loaded on demand via `math: true` front matter (always write formulas as `$$...$$`)
 - 📊 **Mermaid diagrams** — flowcharts and sequence diagrams via `mermaid: true`, re-rendered on theme switch
 - 🌲 **Collapsible TOC** — h2–h4 tree with `tree`-style guides, scroll tracking, desktop sidebar and mobile fold-out
