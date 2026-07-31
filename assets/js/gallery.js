@@ -10,13 +10,19 @@
     var entry = article.querySelector('.entry');
     if (!entry) return;
 
-    // ---------- 1. group consecutive image-only paragraphs into grids ----------
-    function isImageOnly(node) {
-      if (node.nodeType !== 1 || node.tagName !== 'P') return false;
-      var imgs = node.querySelectorAll('img');
-      if (imgs.length !== 1) return false;
-      // paragraph must hold nothing but the image (and its <picture> wrapper)
-      return node.textContent.trim() === '';
+    // ---------- 1. group consecutive images into grids ----------
+    // kramdown emits raw <picture>/<img> block tags as direct children of
+    // .entry (no <p> wrapper), while Markdown-syntax images end up inside a
+    // paragraph. Accept both shapes.
+    function imageOf(node) {
+      if (node.nodeType !== 1) return null;
+      if (node.tagName === 'PICTURE') return node.querySelector('img');
+      if (node.tagName === 'IMG') return node;
+      if (node.tagName === 'P' && node.textContent.trim() === '') {
+        var imgs = node.querySelectorAll('img');
+        if (imgs.length === 1) return imgs[0];
+      }
+      return null;
     }
 
     var children = Array.prototype.slice.call(entry.children);
@@ -28,7 +34,7 @@
       run = [];
     }
     children.forEach(function (node) {
-      if (isImageOnly(node)) run.push(node);
+      if (imageOf(node)) run.push(node);
       else flush();
     });
     flush();
@@ -39,14 +45,17 @@
       var grid = document.createElement('div');
       grid.className = 'gallery';
       entry.insertBefore(grid, group[0]);
-      group.forEach(function (p) {
-        var media = p.querySelector('picture') || p.querySelector('img');
+      group.forEach(function (node) {
+        // move the media itself: the node may BE the <picture>, or wrap one
+        var media = node.tagName === 'P'
+          ? (node.querySelector('picture') || node.querySelector('img'))
+          : node;
         var cell = document.createElement('button');
         cell.type = 'button';
         cell.className = 'gallery-item';
         cell.appendChild(media);
         grid.appendChild(cell);
-        p.remove();
+        if (node.tagName === 'P') node.remove();
         var img = cell.querySelector('img');
         cell.addEventListener('click', function () { open(items.indexOf(img)); });
         items.push(img);
