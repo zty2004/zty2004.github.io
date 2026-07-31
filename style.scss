@@ -16,6 +16,11 @@
 html {
   font-size: 100%;
   scroll-behavior: smooth;
+
+  // native form controls / scrollbars follow the active theme
+  &[data-theme="dark"] {
+    color-scheme: dark;
+  }
 }
 
 body {
@@ -351,7 +356,6 @@ nav {
     letter-spacing: 1px;
     position: relative;
     padding-bottom: 4px;
-
     // animated underline
     &::after {
       content: "";
@@ -378,6 +382,36 @@ nav {
 
     @include darkmode {
       color: $textDark;
+    }
+  }
+
+  .theme-toggle {
+    margin-left: 22px;
+    padding: 0;
+    width: 34px;
+    height: 34px;
+    font-size: 16px;
+    line-height: 32px;
+    text-align: center;
+    vertical-align: middle;
+    background: transparent;
+    border: 1px solid $border;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      border-color: rgba(222, 118, 74, 0.5);
+      box-shadow: 0 2px 10px rgba(222, 118, 74, 0.25);
+      transform: rotate(20deg);
+    }
+
+    @include mobile {
+      margin: 0 10px;
+    }
+
+    @include darkmode {
+      border-color: $borderDark;
     }
   }
 }

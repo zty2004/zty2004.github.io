@@ -5,6 +5,15 @@
 
     {% include meta.html %}
 
+    <!-- Set theme before first paint to avoid flashing -->
+    <script>
+      (function () {
+        var saved = localStorage.getItem('theme');
+        var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
+
     <!--[if lt IE 9]>
       <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -33,6 +42,7 @@
           <nav>
             <a href="{{ site.baseurl }}/">Blog</a>
             <a href="{{ site.baseurl }}/tianyouzuo/">About</a>
+            <button class="theme-toggle" aria-label="Toggle dark mode" title="切换深浅色">🌙</button>
           </nav>
         </header>
       </div>
@@ -62,6 +72,27 @@
         btn.addEventListener('click', function (e) {
           e.preventDefault();
           window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        var toggle = document.querySelector('.theme-toggle');
+        var root = document.documentElement;
+        function renderIcon() {
+          toggle.textContent = root.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙';
+        }
+        renderIcon();
+        toggle.addEventListener('click', function () {
+          var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+          root.setAttribute('data-theme', next);
+          localStorage.setItem('theme', next);
+          renderIcon();
+        });
+
+        // Follow system changes only when the user hasn't chosen manually
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
+          if (!localStorage.getItem('theme')) {
+            root.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+            renderIcon();
+          }
         });
       })();
     </script>
