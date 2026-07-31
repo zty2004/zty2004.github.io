@@ -143,6 +143,17 @@
       if (e.target.tagName === 'A') details.open = false;
     });
 
+    // The sidebar is position:fixed, so near the end of the page it would sit
+    // on top of the footer. Fade it out once the footer comes into view.
+    var footer = document.querySelector('.wrapper-footer');
+    if (footer && 'IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          aside.classList.toggle('near-footer', e.isIntersecting);
+        });
+      }, { rootMargin: '0px 0px -40px 0px' }).observe(footer);
+    }
+
     // highlight the section in view and unfold its ancestors (both TOCs)
     var links = [].concat(
       Array.prototype.slice.call(aside.querySelectorAll('a')),
