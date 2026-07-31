@@ -254,6 +254,12 @@ img {
 }
 
 // Photos inside posts — rounded, soft shadow, gentle lift on hover
+// (<picture> wrappers are transparent containers; style the inner img)
+.entry picture,
+.post picture {
+  display: block;
+}
+
 .entry img,
 .post img {
   display: block;

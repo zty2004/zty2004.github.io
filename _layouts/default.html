@@ -140,7 +140,7 @@
       window.addEventListener('DOMContentLoaded', function () {
         if (typeof mediumZoom !== 'function') return;
         if (document.querySelector('.posts')) return; // index page: cards link to posts instead
-        // skip images wrapped in links
+        // skip images wrapped in links; <picture> wrappers are fine
         var imgs = Array.prototype.filter.call(
           document.querySelectorAll('article.post > .entry img'),
           function (img) { return !img.closest('a'); }
