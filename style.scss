@@ -1138,6 +1138,132 @@ footer {
   }
 }
 
+/*********************/
+/* TAGS              */
+/*********************/
+
+// Small tag chips shown on index cards and post pages
+.post-tags {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.post-tag {
+  padding: 1px 10px;
+  font-size: 13px;
+  font-weight: 500;
+  color: $monetDeep;
+  background: $monetMist;
+  border-radius: 999px;
+  transition: all 0.25s ease;
+
+  &:hover {
+    color: #fff;
+    background: linear-gradient(120deg, $monetSky, $monetBlue);
+    box-shadow: 0 3px 10px rgba(91, 127, 199, 0.35);
+  }
+
+  @include darkmode {
+    background: rgba(91, 127, 199, 0.16);
+    color: $monetSky;
+  }
+}
+
+// post page: tags sit on their own line under the date
+.post > .post-tags {
+  display: flex;
+  margin: 0 0 18px;
+}
+
+// /tags/ archive page
+.tags-page {
+  .tags-page-title {
+    margin-top: 10px;
+  }
+
+  .tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 10px 18px;
+    padding: 18px 22px;
+    margin-bottom: 34px;
+    background: $card;
+    border: 1px solid $border;
+    border-radius: 16px;
+    box-shadow: $shadowSm;
+
+    @include darkmode {
+      background: $cardDark;
+      border-color: $borderDark;
+    }
+  }
+
+  .tag-cloud-item {
+    font-weight: 600;
+    color: $monetDeep;
+    transition: color 0.2s ease;
+
+    sup {
+      font-size: 11px;
+      color: $gray;
+      margin-left: 2px;
+    }
+
+    &:hover {
+      color: $accent;
+    }
+
+    @include darkmode {
+      color: $monetSky;
+    }
+  }
+
+  .tag-group {
+    margin-bottom: 26px;
+    // offset anchor target below the sticky masthead
+    scroll-margin-top: 110px;
+
+    h2 {
+      font-size: 20px;
+      color: $accentDark;
+      margin-bottom: 8px;
+
+      @include darkmode {
+        color: #f0a883;
+      }
+    }
+  }
+
+  .tag-post-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      padding: 6px 0;
+      border-bottom: 1px dashed $border;
+
+      &:last-child { border-bottom: none; }
+
+      @include darkmode {
+        border-bottom-color: $borderDark;
+      }
+    }
+
+    .date {
+      flex-shrink: 0;
+      font-variant-numeric: tabular-nums;
+    }
+  }
+}
+
 // Settled on moving the import of syntax highlighting to the bottom of the CSS
 // ... Otherwise it really bloats up the top of the CSS file and makes it difficult to find the start
 @import "highlights";
