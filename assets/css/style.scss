@@ -1208,24 +1208,24 @@ div.highlight.has-copy {
     font-size: 12px;
     font-weight: 600;
     font-family: $helvetica;
-    color: $gray;
-    background: rgba(255, 255, 255, 0.85);
-    border: 1px solid $border;
+    // sits on the Monokai dark surface in both themes
+    color: #c9c9c1;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.18);
     border-radius: 999px;
     cursor: pointer;
     opacity: 0;
     transition: all 0.25s ease;
 
-    &.done {
+    &:hover {
       color: #fff;
-      background: linear-gradient(90deg, $monetBlue, $monetLavender);
-      border-color: transparent;
+      background: rgba(255, 255, 255, 0.2);
     }
 
-    @include darkmode {
-      background: rgba(33, 39, 54, 0.85);
-      border-color: $borderDark;
-      color: $textDark;
+    &.done {
+      color: #272822;
+      background: #a6e22e;
+      border-color: transparent;
     }
   }
 
@@ -1315,10 +1315,49 @@ div.highlight.has-copy {
     margin: 0;
     padding: 0;
 
-    // nested levels: indented, hidden until unfolded
+    // nested levels: indented, hidden until unfolded, drawn as a tree
     ul {
-      padding-left: 14px;
+      position: relative;
+      padding-left: 16px;
       display: none;
+
+      // vertical trunk running down the children
+      &::before {
+        content: "";
+        position: absolute;
+        left: 6px;
+        top: 0;
+        bottom: 12px;
+        border-left: 1px dashed rgba(110, 110, 120, 0.45);
+      }
+
+      li {
+        position: relative;
+
+        // horizontal branch into each child
+        &::before {
+          content: "";
+          position: absolute;
+          left: -10px;
+          top: 13px;
+          width: 10px;
+          border-top: 1px dashed rgba(110, 110, 120, 0.45);
+        }
+
+        // last child: stop the trunk right at its branch
+        &:last-child::after {
+          content: "";
+          position: absolute;
+          left: -10px;
+          top: 13px;
+          bottom: 0;
+          border-left: 1px solid $card;
+
+          @include darkmode {
+            border-left-color: $cardDark;
+          }
+        }
+      }
     }
   }
 
@@ -1429,9 +1468,46 @@ div.highlight.has-copy {
     margin: 8px 0 4px;
     padding: 0;
 
+    // tree guides, same as the desktop panel
     ul {
-      padding-left: 16px;
+      position: relative;
+      padding-left: 18px;
       margin: 0;
+
+      &::before {
+        content: "";
+        position: absolute;
+        left: 6px;
+        top: 0;
+        bottom: 14px;
+        border-left: 1px dashed rgba(110, 110, 120, 0.45);
+      }
+
+      li {
+        position: relative;
+
+        &::before {
+          content: "";
+          position: absolute;
+          left: -12px;
+          top: 15px;
+          width: 12px;
+          border-top: 1px dashed rgba(110, 110, 120, 0.45);
+        }
+
+        &:last-child::after {
+          content: "";
+          position: absolute;
+          left: -12px;
+          top: 15px;
+          bottom: 0;
+          border-left: 1px solid $card;
+
+          @include darkmode {
+            border-left-color: $cardDark;
+          }
+        }
+      }
     }
   }
 
