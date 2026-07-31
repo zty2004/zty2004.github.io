@@ -296,14 +296,26 @@ img {
   letter-spacing: 0.03em;
 }
 
-// Specify the color of the selection
+// Specify the color of the selection — needs enough contrast to be obvious
+// on the light paper background, so use a saturated sunset tint, not $accentSoft.
 ::-moz-selection {
   color: $darkerGray;
-  background: $accentSoft;
+  background: rgba(242, 175, 120, 0.55);
 }
 ::selection {
   color: $darkerGray;
-  background: $accentSoft;
+  background: rgba(242, 175, 120, 0.55);
+}
+
+html[data-theme="dark"] {
+  ::-moz-selection {
+    color: #fff;
+    background: rgba(222, 118, 74, 0.5);
+  }
+  ::selection {
+    color: #fff;
+    background: rgba(222, 118, 74, 0.5);
+  }
 }
 
 // Nicolas Gallagher's micro clearfix hack
@@ -2030,10 +2042,23 @@ mjx-container[display="true"] {
     }
   }
 
+  .tags-hint {
+    margin: 0 0 14px;
+    font-size: 14px;
+    color: $gray;
+  }
+
   .tag-cloud-item {
     font-weight: 600;
     color: $monetDeep;
-    transition: color 0.2s ease;
+    background: transparent;
+    border: none;
+    padding: 2px 6px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: inherit;
+    line-height: 1.4;
+    transition: color 0.2s ease, background 0.2s ease;
 
     sup {
       font-size: 11px;
@@ -2042,12 +2067,83 @@ mjx-container[display="true"] {
     }
 
     &:hover {
-      color: $accent;
+      color: $accentDark;
+      background: rgba(222, 118, 74, 0.08);
+    }
+
+    // active filter
+    &.selected {
+      color: #fff;
+      background: linear-gradient(120deg, $monetSky, $monetBlue);
+      box-shadow: 0 2px 8px rgba(91, 127, 199, 0.35);
+
+      sup { color: rgba(255, 255, 255, 0.8); }
     }
 
     @include darkmode {
       color: $monetSky;
+
+      &.selected { color: #fff; }
     }
+  }
+
+  // filter status bar
+  .tag-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 22px;
+    padding: 10px 16px;
+    font-size: 13.5px;
+    color: $gray;
+    background: $card;
+    border: 1px solid $border;
+    border-radius: 10px;
+
+    @include darkmode {
+      background: $cardDark;
+      border-color: $borderDark;
+    }
+
+    label {
+      margin-left: 8px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .tag-filter-count {
+      font-weight: 600;
+      color: $accentDark;
+
+      @include darkmode { color: #f0a883; }
+    }
+
+    .tag-filter-clear {
+      margin-left: auto;
+      padding: 3px 12px;
+      font-size: 13px;
+      font-family: inherit;
+      color: $gray;
+      background: transparent;
+      border: 1px solid $border;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &:hover {
+        color: $accentDark;
+        border-color: rgba(222, 118, 74, 0.5);
+      }
+
+      @include darkmode { border-color: $borderDark; }
+    }
+  }
+
+  .tag-empty {
+    padding: 24px 0;
+    text-align: center;
+    color: $gray;
   }
 
   .tag-group {
