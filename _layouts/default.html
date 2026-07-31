@@ -82,6 +82,16 @@
         <footer class="footer">
           {% include svg-icons.html %}
           <p class="footer-copy">© {{ site.time | date: "%Y" }} {{ site.name }} · {{ site.description }}</p>
+          {% if site.busuanzi %}
+          <p class="footer-stats">
+            <span id="busuanzi_container_site_pv" style="display:none">
+              ☀️ <span id="busuanzi_value_site_pv"></span> views
+            </span>
+            <span id="busuanzi_container_site_uv" style="display:none">
+              · 🌙 <span id="busuanzi_value_site_uv"></span> visitors
+            </span>
+          </p>
+          {% endif %}
         </footer>
       </div>
     </div>
@@ -115,6 +125,10 @@
         });
       })();
     </script>
+
+    {% if site.busuanzi %}
+    <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    {% endif %}
 
     {% include analytics.html %}
   </body>
