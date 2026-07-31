@@ -1383,6 +1383,45 @@ footer {
   }
 }
 
+// Compact mode for prose-heavy posts: runs of photos become tidy justified
+// rows (equal height, each row filling the width) so they take little vertical
+// space and the text keeps flowing. flex-grow is weighted by aspect ratio; the
+// ::after spacer stops a short last row from stretching out of proportion.
+.gallery-compact {
+  display: flex;
+  flex-wrap: wrap;
+  grid-template-columns: none;
+  grid-auto-rows: auto;
+  gap: 8px;
+  margin: 24px 0;
+
+  &::after {
+    content: "";
+    flex-grow: 999999;
+    min-width: 25%;
+  }
+
+  .gallery-item {
+    --tilt: 0deg;            // tidy, not hand-laid
+    --drift: 0px;
+    height: 190px;
+    flex-grow: calc(var(--ar, 1.333) * 100);
+    flex-basis: calc(var(--ar, 1.333) * 190px);
+    grid-column: auto;
+    grid-row: auto;
+
+    @include mobile {
+      height: 130px;
+      flex-basis: calc(var(--ar, 1.333) * 130px);
+    }
+
+    &:hover,
+    &:focus-visible {
+      transform: translateY(-3px) scale(1.02);
+    }
+  }
+}
+
 // zoom controls sitting above each wall
 .gallery-zoom {
   display: flex;
