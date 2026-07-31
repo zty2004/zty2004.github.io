@@ -8,33 +8,158 @@ permalink: /tags/
 
   <h1 class="tags-page-title">🏷️ Tags</h1>
 
-  <!-- Tag cloud: font size scales with post count -->
-  <div class="tag-cloud">
+  <p class="tags-hint">点击标签进行筛选，可多选（默认显示同时包含所选标签的文章）。</p>
+
+  <!-- Tag cloud doubles as a multi-select filter; font size scales with post count -->
+  <div class="tag-cloud" id="tag-cloud">
     {% assign sorted_tags = site.tags | sort %}
     {% for tag in sorted_tags %}
       {% assign tag_name = tag[0] %}
       {% assign post_count = tag[1] | size %}
-      <a class="tag-cloud-item" href="#{{ tag_name | slugify }}"
-         style="font-size: {{ post_count | times: 3 | plus: 14 }}px;">
+      <button type="button" class="tag-cloud-item" data-tag="{{ tag_name }}"
+              aria-pressed="false"
+              style="font-size: {{ post_count | times: 3 | plus: 14 }}px;">
         {{ tag_name }}<sup>{{ post_count }}</sup>
-      </a>
+      </button>
     {% endfor %}
   </div>
 
-  <!-- Posts grouped by tag -->
-  {% for tag in sorted_tags %}
-    {% assign tag_name = tag[0] %}
-    <section class="tag-group" id="{{ tag_name | slugify }}">
-      <h2># {{ tag_name }}</h2>
-      <ul class="tag-post-list">
-        {% for post in tag[1] %}
-          <li>
-            <span class="date">{{ post.date | date: "%Y.%m.%d" }}</span>
-            <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
-          </li>
-        {% endfor %}
-      </ul>
-    </section>
-  {% endfor %}
+  <div class="tag-filter-bar" id="tag-filter-bar" hidden>
+    <span class="tag-filter-mode">
+      匹配方式：
+      <label><input type="radio" name="tag-mode" value="all" checked> 全部包含 (AND)</label>
+      <label><input type="radio" name="tag-mode" value="any"> 任一包含 (OR)</label>
+    </span>
+    <span class="tag-filter-count" id="tag-filter-count"></span>
+    <button type="button" class="tag-filter-clear" id="tag-filter-clear">清除筛选</button>
+  </div>
+
+  <!-- Flat list used when filtering is active -->
+  <section class="tag-results" id="tag-results" hidden>
+    <ul class="tag-post-list">
+      {% for post in site.posts %}
+        <li data-tags="{{ post.tags | join: '|' }}">
+          <span class="date">{{ post.date | date: "%Y.%m.%d" }}</span>
+          <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
+          <span class="post-tags">
+            {% for tag in post.tags %}<span class="post-tag">#{{ tag }}</span>{% endfor %}
+          </span>
+        </li>
+      {% endfor %}
+    </ul>
+    <p class="tag-empty" id="tag-empty" hidden>没有文章同时包含所选标签。</p>
+  </section>
+
+  <!-- Default view: posts grouped by tag -->
+  <div id="tag-groups">
+    {% for tag in sorted_tags %}
+      {% assign tag_name = tag[0] %}
+      <section class="tag-group" id="{{ tag_name | slugify }}">
+        <h2># {{ tag_name }}</h2>
+        <ul class="tag-post-list">
+          {% for post in tag[1] %}
+            <li>
+              <span class="date">{{ post.date | date: "%Y.%m.%d" }}</span>
+              <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      </section>
+    {% endfor %}
+  </div>
 
 </div>
+
+<script>
+  (function () {
+    var cloud = document.getElementById('tag-cloud');
+    var bar = document.getElementById('tag-filter-bar');
+    var results = document.getElementById('tag-results');
+    var groups = document.getElementById('tag-groups');
+    var countEl = document.getElementById('tag-filter-count');
+    var emptyEl = document.getElementById('tag-empty');
+    var items = Array.prototype.slice.call(results.querySelectorAll('li'));
+    var selected = [];
+
+    function mode() {
+      var r = document.querySelector('input[name="tag-mode"]:checked');
+      return r ? r.value : 'all';
+    }
+
+    function render() {
+      cloud.querySelectorAll('.tag-cloud-item').forEach(function (b) {
+        var on = selected.indexOf(b.dataset.tag) >= 0;
+        b.classList.toggle('selected', on);
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+
+      if (!selected.length) {
+        bar.hidden = true;
+        results.hidden = true;
+        groups.hidden = false;
+        history.replaceState(null, '', location.pathname);
+        return;
+      }
+
+      bar.hidden = false;
+      results.hidden = false;
+      groups.hidden = true;
+
+      var useAll = mode() === 'all';
+      var shown = 0;
+      items.forEach(function (li) {
+        var tags = (li.dataset.tags || '').split('|').filter(Boolean);
+        var hit = useAll
+          ? selected.every(function (t) { return tags.indexOf(t) >= 0; })
+          : selected.some(function (t) { return tags.indexOf(t) >= 0; });
+        li.hidden = !hit;
+        if (hit) shown++;
+      });
+      countEl.textContent = shown + ' 篇文章';
+      emptyEl.hidden = shown > 0;
+
+      history.replaceState(null, '', location.pathname + '?tags=' +
+        selected.map(encodeURIComponent).join(',') + (useAll ? '' : '&mode=any'));
+    }
+
+    cloud.addEventListener('click', function (e) {
+      var btn = e.target.closest('.tag-cloud-item');
+      if (!btn) return;
+      var tag = btn.dataset.tag;
+      var i = selected.indexOf(tag);
+      if (i >= 0) selected.splice(i, 1);
+      else selected.push(tag);
+      render();
+    });
+
+    document.getElementById('tag-filter-clear').addEventListener('click', function () {
+      selected = [];
+      render();
+    });
+
+    bar.addEventListener('change', function (e) {
+      if (e.target.name === 'tag-mode') render();
+    });
+
+    // restore selection from the URL (?tags=a,b&mode=any) or a legacy #tag anchor
+    var params = new URLSearchParams(location.search);
+    var known = Array.prototype.map.call(
+      cloud.querySelectorAll('.tag-cloud-item'), function (b) { return b.dataset.tag; }
+    );
+    if (params.get('tags')) {
+      selected = params.get('tags').split(',').map(decodeURIComponent)
+        .filter(function (t) { return known.indexOf(t) >= 0; });
+      if (params.get('mode') === 'any') {
+        var any = document.querySelector('input[name="tag-mode"][value="any"]');
+        if (any) any.checked = true;
+      }
+    } else if (location.hash) {
+      var slug = decodeURIComponent(location.hash.slice(1));
+      var match = known.filter(function (t) {
+        return t.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff]+/g, '-') === slug;
+      });
+      selected = match;
+    }
+    render();
+  })();
+</script>
