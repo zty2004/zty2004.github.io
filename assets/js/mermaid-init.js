@@ -12,22 +12,32 @@
   }
 
   window.addEventListener('DOMContentLoaded', function () {
-    // collect mermaid sources and replace the code blocks with render targets
+    // Collect mermaid sources and replace the code blocks with render targets.
+    // Rouge has no mermaid lexer, so kramdown falls back to a plain
+    // <pre><code class="language-mermaid"> block — handle that shape first,
+    // and still accept div.highlight in case a lexer appears later.
     var sources = [];
+
+    function claim(block, code) {
+      var target = document.createElement('div');
+      target.className = 'mermaid-figure';
+      block.parentNode.replaceChild(target, block);
+      sources.push({ el: target, code: code });
+    }
+
+    document.querySelectorAll('pre > code.language-mermaid').forEach(function (code) {
+      claim(code.parentNode, code.textContent.trim());
+    });
+
     document.querySelectorAll('div.highlight').forEach(function (block) {
       var pre = block.querySelector('pre');
       if (!pre) return;
-      var code = pre.innerText.trim();
-      // a mermaid fence keeps its language class; fall back to sniffing the header
+      var code = (pre.innerText || pre.textContent || '').trim();
+      if (!code) return;
       var isMermaid = block.className.indexOf('language-mermaid') >= 0 ||
         /^(graph|flowchart|sequenceDiagram|classDiagram|stateDiagram|erDiagram|journey|gantt|pie|gitGraph|mindmap|timeline|quadrantChart|xychart)/.test(code);
       if (!isMermaid) return;
-
-      var target = document.createElement('div');
-      target.className = 'mermaid-figure';
-      target.textContent = code;
-      block.parentNode.replaceChild(target, block);
-      sources.push({ el: target, code: code });
+      claim(block, code);
     });
 
     if (!sources.length) return;
