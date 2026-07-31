@@ -40,10 +40,10 @@ disqus:
 # Setup: 1) enable Discussions in repo Settings; 2) install the giscus App
 # (https://github.com/apps/giscus); 3) generate the IDs on giscus.app and fill in below.
 giscus:
-  repo:            # e.g. zty2004/zty2004.github.io
-  repo_id:         # from giscus.app
+  repo: zty2004/zty2004.github.io
+  repo_id: R_kgDOK_q2Hg
   category: Announcements
-  category_id:     # from giscus.app
+  category_id: DIC_kwDOK_q2Hs4DCXcx
 
 # busuanzi visitor statistics (https://busuanzi.ibruce.info) — set true to enable
 busuanzi: true
