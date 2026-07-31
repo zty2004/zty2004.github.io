@@ -356,6 +356,13 @@ nav {
   }
 }
 
+// Dreamy Monet gradient drifting like water-lily reflections
+@keyframes monetFlow {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
 // Post cards on the index page
 .posts > .post {
   background: $card;
@@ -448,16 +455,19 @@ nav {
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: $accent;
-    border: 1.5px solid rgba(212, 115, 138, 0.5);
+    color: $monetBlue;
+    border: 1.5px solid rgba(91, 127, 199, 0.5);
     border-radius: 999px;
-    transition: all 0.25s ease;
+    transition: all 0.3s ease;
 
     &:hover {
       color: #fff;
-      background: linear-gradient(90deg, $accent, $accentDark);
+      background: linear-gradient(120deg, $monetSky, $monetBlue, $monetLavender, $monetTeal, $monetSky);
+      background-size: 300% 300%;
+      animation: monetFlow 4s ease infinite;
       border-color: transparent;
-      box-shadow: 0 4px 14px rgba(212, 115, 138, 0.4);
+      box-shadow: 0 4px 18px rgba(91, 127, 199, 0.45),
+                  0 0 30px rgba(157, 143, 212, 0.25);
     }
   }
 }
@@ -529,7 +539,7 @@ footer {
   background: $card;
   border: 1px solid $border;
   box-shadow: $shadowMd;
-  color: $accent;
+  color: $monetBlue;
   font-size: 18px;
   line-height: 40px;
   text-align: center;
@@ -546,9 +556,12 @@ footer {
   }
 
   &:hover {
-    background: $accent;
     color: #fff;
+    background: linear-gradient(120deg, $monetSky, $monetBlue, $monetLavender, $monetTeal, $monetSky);
+    background-size: 300% 300%;
+    animation: monetFlow 4s ease infinite;
     border-color: transparent;
+    box-shadow: 0 6px 20px rgba(91, 127, 199, 0.45);
   }
 
   @include darkmode {
@@ -684,21 +697,24 @@ footer {
       padding: 5px 14px;
       font-size: 14px;
       font-weight: 500;
-      color: $accentDark;
-      background: $accentSoft;
+      color: $monetDeep;
+      background: $monetMist;
       border-radius: 999px;
-      transition: all 0.25s ease;
+      transition: all 0.3s ease;
 
       &:hover {
         color: #fff;
-        background: linear-gradient(90deg, $accent, $accentDark);
-        box-shadow: 0 4px 12px rgba(212, 115, 138, 0.35);
+        background: linear-gradient(120deg, $monetSky, $monetBlue, $monetLavender, $monetTeal, $monetSky);
+        background-size: 300% 300%;
+        animation: monetFlow 4s ease infinite;
+        box-shadow: 0 4px 16px rgba(91, 127, 199, 0.4),
+                    0 0 26px rgba(157, 143, 212, 0.25);
         transform: translateY(-1px);
       }
 
       @include darkmode {
-        background: rgba(212, 115, 138, 0.14);
-        color: #e8a2b3;
+        background: rgba(91, 127, 199, 0.16);
+        color: $monetSky;
       }
     }
   }
