@@ -4,10 +4,16 @@
 
   var root = document.documentElement;
 
+  // true only on a single post page (the post list also contains article.post cards)
+  function isPostPage() {
+    return document.body.classList.contains('layout-post');
+  }
+
   // ------------------------------------------------ reading progress bar --
   function initProgress() {
+    if (!isPostPage()) return;
     var entry = document.querySelector('article.post > .entry');
-    if (!entry) return;   // only on single posts
+    if (!entry) return;
 
     var bar = document.createElement('div');
     bar.className = 'read-progress';
@@ -79,6 +85,7 @@
   }
 
   function headings() {
+    if (!isPostPage()) return [];
     var entry = document.querySelector('article.post > .entry');
     return entry ? Array.prototype.slice.call(entry.querySelectorAll('h2, h3, h4')) : [];
   }

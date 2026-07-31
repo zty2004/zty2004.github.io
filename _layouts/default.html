@@ -44,7 +44,7 @@
     <link rel="alternate" type="application/rss+xml" title="{{ site.name }} - {{ site.description }}" href="{{ site.baseurl }}/feed.xml" />
   </head>
 
-  <body>
+  <body class="layout-{{ page.layout | default: 'default' }}">
     <div class="light-rays" aria-hidden="true"></div>
 
     <button class="theme-switch" aria-label="Toggle color scheme" title="切换深浅色">
@@ -155,7 +155,9 @@
     <!-- Lightbox: medium-zoom is fetched on the first image click, not upfront -->
     <script>
       (function () {
-        if (document.querySelector('.posts')) return; // index cards link to posts
+        // scripts must not treat the post list as an article: its cards are also
+        // <article class="post"> with an .entry inside
+        if (!document.body.classList.contains('layout-post')) return;
         var entry = document.querySelector('article.post > .entry');
         if (!entry) return;
 

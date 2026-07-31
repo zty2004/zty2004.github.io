@@ -14,7 +14,8 @@ permalink: /feed.xml
   <channel>
     <title>{{ site.name | xml_escape }}</title>
     <description>{{ site.description | xml_escape }}</description>
-    <link>{{ root }}/</link>
+    <!-- the feed lists posts, so point readers at the post index, not the profile -->
+    <link>{{ root }}/blogs/</link>
     <atom:link href="{{ root }}/feed.xml" rel="self" type="application/rss+xml" />
     <language>zh-CN</language>
     <lastBuildDate>{{ site.time | date_to_rfc822 }}</lastBuildDate>
