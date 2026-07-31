@@ -1,7 +1,7 @@
 ---
 layout: default
-title: About
-permalink: /about/
+title: Tianyou Zuo
+permalink: /tianyouzuo/
 ---
 
 <div class="academic-home">
@@ -10,19 +10,22 @@ permalink: /about/
   <section class="profile">
     <img class="profile-photo" src="{{ site.avatar }}" alt="{{ site.name }}" />
     <div class="profile-info">
-      <h1 class="profile-name">Your Name <span class="profile-alias">(fztym)</span></h1>
+      <h1 class="profile-name">Tianyou Zuo <span class="profile-alias">(fztym)</span></h1>
       <p class="profile-title">Undergraduate Student</p>
-      <p class="profile-affiliation">School of Computer Science, XXX University</p>
+      <p class="profile-affiliation">Global College, Shanghai Jiao Tong University</p>
       <p class="profile-bio">
-        I am an undergraduate student at XXX University. My research interests lie in
-        <em>machine learning</em>, <em>computer systems</em>, and <em>everything in between</em>.
-        I am fortunate to be advised by <a href="#">Prof. XXX</a>.
+        I am a junior student at Shanghai Jiao Tong University, majoring in ECE.
+        My research interests lie in <em>machine learning systems</em>, <em>GPU architecture</em>,
+        and <em>theoretical computer science</em>.
       </p>
       <ul class="profile-links">
-        <li><a href="mailto:zty13162909941@126.com">✉️ Email</a></li>
+        <li><a href="mailto:fztym@sjtu.edu.cn">✉️ Email</a></li>
         <li><a href="https://github.com/zty2004" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="{{ site.baseurl }}/">Blog</a></li>
+        <!-- Restore these once the links are ready:
         <li><a href="#" target="_blank" rel="noopener">Google Scholar</a></li>
         <li><a href="#" target="_blank" rel="noopener">CV</a></li>
+        -->
       </ul>
     </div>
   </section>
@@ -31,10 +34,10 @@ permalink: /about/
   <section class="home-section">
     <h2>🔥 News</h2>
     <ul class="news-list">
-      <li><span class="news-date">2026.07</span> One paper accepted to <strong>XXX 2026</strong>! 🎉</li>
-      <li><span class="news-date">2026.05</span> Started my research internship at XXX Lab.</li>
-      <li><span class="news-date">2025.09</span> Received the XXX Scholarship.</li>
-      <li><span class="news-date">2024.01</span> Launched this website — see the <a href="{{ site.baseurl }}/">blog</a> for my travel notes in Europe.</li>
+      <!-- <li><span class="news-date">2026.07</span> One paper accepted to <strong>XXX 2026</strong>! 🎉</li> -->
+      <li><span class="news-date">2026.07</span> Started my internship at Alibaba PAI Lab.</li>
+      <li><span class="news-date">2026.01</span> Started my internship at Moore Threads developing GPU kernels.</li>
+      <li><span class="news-date">2024.01</span> Launched this website.</li>
     </ul>
   </section>
 
@@ -42,14 +45,13 @@ permalink: /about/
   <section class="home-section">
     <h2>🧭 Research Interests</h2>
     <div class="tag-list">
-      <span class="tag">Machine Learning</span>
-      <span class="tag">Computer Vision</span>
-      <span class="tag">Natural Language Processing</span>
-      <span class="tag">Distributed Systems</span>
+      <span class="tag">ML Systems</span>
+      <span class="tag">GPU Architecture</span>
+      <span class="tag">Theoretical Computer Science</span>
     </div>
     <p>
-      Briefly describe here what problems you care about and why they matter.
-      One or two sentences are enough to give visitors a clear picture.
+      I work on optimizing kernels in math libraries and inference engines,
+      building new GPU architectures, and exploring theoretical computer science.
     </p>
   </section>
 
@@ -57,23 +59,22 @@ permalink: /about/
   <section class="home-section">
     <h2>🎓 Education</h2>
     <div class="edu-item">
-      <div class="edu-time">2022.09 – Present</div>
+      <div class="edu-time">2023.09 – Present</div>
       <div class="edu-body">
-        <h3>XXX University</h3>
-        <p>B.Eng. in Computer Science and Technology · GPA: X.XX / 4.0 (Top X%)</p>
+        <h3>Shanghai Jiao Tong University</h3>
+        <p>B.Eng. in Electrical and Computer Engineering · Top 20%</p>
       </div>
     </div>
     <div class="edu-item">
-      <div class="edu-time">2019.09 – 2022.06</div>
+      <div class="edu-time">2020.09 – 2023.06</div>
       <div class="edu-body">
-        <h3>XXX High School</h3>
-        <p>Science track</p>
+        <h3>Shanghai Gezhi High School</h3>
       </div>
     </div>
   </section>
 
   <!-- ===== Publications & Projects ===== -->
-  <section class="home-section">
+  <!-- <section class="home-section">
     <h2>📄 Publications & Projects</h2>
     <div class="pub-item">
       <span class="pub-venue">XXX 2026</span>
@@ -93,7 +94,7 @@ permalink: /about/
         <a href="https://github.com/zty2004/zty2004.github.io" target="_blank" rel="noopener">[Code]</a>
       </p>
     </div>
-  </section>
+  </section>-->
 
   <!-- ===== Misc ===== -->
   <section class="home-section">
