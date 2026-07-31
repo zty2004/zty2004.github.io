@@ -1,6 +1,7 @@
 ---
 layout: post
 title: 2024-1-28-Switzerland
+tags: [travel, switzerland]
 ---
 
 <img src="{{site.baseurl}}/images/2024-1-28-Switzerland/IMG_20240127_112007.jpg" alt="pic1" loading="lazy" decoding="async">
