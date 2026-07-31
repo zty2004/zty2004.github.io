@@ -44,9 +44,10 @@
     // must stay navigable with the arrow keys too.
     var items = Array.prototype.slice.call(entry.querySelectorAll('img'));
 
-    // Photo-only posts get the loose, hand-laid wall. Posts that mix prose with
-    // photos keep the plain vertical flow so pictures stay next to the text
-    // that discusses them — only the lightbox is added there.
+    // Layout mode is derived from the post's shape:
+    //   photo-only  -> loose, hand-laid wall with pinch zoom
+    //   prose+photos -> tidy justified rows, so runs of photos stay compact and
+    //                   the reading flow is not pushed apart
     var proseLength = 0;
     children.forEach(function (node) {
       if (!imageOf(node)) proseLength += node.textContent.trim().length;
@@ -54,9 +55,9 @@
     var photoOnly = proseLength < 40 && items.length >= 4;
 
     var builtGrids = [];
-    if (photoOnly) grids.forEach(function (group) {
+    grids.forEach(function (group) {
       var grid = document.createElement('div');
-      grid.className = 'gallery';
+      grid.className = photoOnly ? 'gallery' : 'gallery gallery-compact';
       entry.insertBefore(grid, group[0]);
       group.forEach(function (node) {
         // move the media itself: the node may BE the <picture>, or wrap one
@@ -104,6 +105,17 @@
 
     function layout(grid) {
       var cells = Array.prototype.slice.call(grid.children);
+
+      // Compact mode: photos keep their ratio and CSS flex packs them into
+      // justified rows — only the aspect ratio needs to reach the stylesheet.
+      if (!photoOnly) {
+        cells.forEach(function (cell) {
+          var img = cell.querySelector('img');
+          cell.style.setProperty('--ar', (1 / ratioOf(img)).toFixed(4));
+        });
+        return;
+      }
+
       var colW = (grid.clientWidth - GAP * (cols - 1)) / cols;
       if (!colW || colW < 1) return;
 
@@ -136,7 +148,8 @@
       if (zoomEl) zoomEl.textContent = cols;
     }
 
-    builtGrids.forEach(function (grid) {
+    // Zoom only makes sense on a photo wall; compact rows follow the text.
+    if (photoOnly) builtGrids.forEach(function (grid) {
       grid.style.setProperty('--cols', cols);
 
       // --- zoom controls (discoverability for the gesture) ---
