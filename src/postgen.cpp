@@ -271,6 +271,20 @@ static void compressImage(const fs::path& img, bool dryRun) {
               << before / 1024 << " KB -> " << after / 1024 << " KB\n";
 }
 
+// Produce a .webp sibling next to a JPEG/PNG so posts can serve <picture>.
+// Requires cwebp; silently skipped when unavailable.
+static bool makeWebp(const fs::path& img) {
+    static int haveCwebp = -1;
+    if (haveCwebp < 0) haveCwebp = runCapture("command -v cwebp").empty() ? 0 : 1;
+    if (!haveCwebp) return false;
+
+    fs::path webp = img;
+    webp.replace_extension(".webp");
+    string cmd = "cwebp -quiet -q 80 -m 4 " + shellQuote(img.string()) +
+                 " -o " + shellQuote(webp.string());
+    return std::system(cmd.c_str()) == 0 && fs::exists(webp);
+}
+
 // ---------------------------------------------------------- image pipeline --
 
 static std::pair<int, int> imageDims(const fs::path& img) {
@@ -326,8 +340,17 @@ static string importImage(ImageCtx& ctx, const string& rawPath, const string& al
     string dims = (w > 0 && h > 0)
         ? " width=\"" + std::to_string(w) + "\" height=\"" + std::to_string(h) + "\""
         : "";
-    return "<img src=\"{{site.baseurl}}/" + ctx.imgDirRel + "/" + name +
-           "\" alt=\"" + alt + "\" loading=\"lazy\" decoding=\"async\"" + dims + ">";
+    string base = "{{site.baseurl}}/" + ctx.imgDirRel + "/" + name;
+    string tag = "<img src=\"" + base + "\" alt=\"" + alt +
+                 "\" loading=\"lazy\" decoding=\"async\"" + dims + ">";
+
+    // prefer WebP when a sibling exists, keeping the original as fallback
+    if (!ctx.dryRun && makeWebp(dest)) {
+        string webpSrc = base.substr(0, base.rfind('.')) + ".webp";
+        tag = "<picture><source srcset=\"" + webpSrc + "\" type=\"image/webp\">" +
+              tag + "</picture>";
+    }
+    return tag;
 }
 
 // rewrite ![alt](path) and <img src="path"> that point at local files
@@ -520,6 +543,7 @@ int main(int argc, char** argv) {
             std::system(("sips --resampleWidth 480 -s format jpeg -s formatOptions 70 " +
                          shellQuote(first.string()) + " --out " + shellQuote(thumbPath.string()) +
                          " >/dev/null").c_str());
+            makeWebp(thumbPath);  // <picture> source for the index card
         }
     }
 
