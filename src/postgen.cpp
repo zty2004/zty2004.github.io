@@ -237,6 +237,14 @@ static void compressImage(const fs::path& img, bool dryRun) {
 
 // ---------------------------------------------------------- image pipeline --
 
+static std::pair<int, int> imageDims(const fs::path& img) {
+    string out = runCapture("sips -g pixelWidth -g pixelHeight " + shellQuote(img.string()) +
+                            " | awk '/pixel/ {print $2}'");
+    int w = 0, h = 0;
+    std::istringstream(out) >> w >> h;
+    return {w, h};
+}
+
 struct ImageCtx {
     fs::path srcDir;    // directory of the source document
     fs::path repoRoot;
@@ -269,15 +277,21 @@ static string importImage(ImageCtx& ctx, const string& rawPath, const string& al
 
     fs::path destDir = ctx.repoRoot / ctx.imgDirRel;
     fs::path dest = destDir / name;
+    int w = 0, h = 0;
     if (ctx.dryRun) {
         std::cout << "  [would copy] " << src.string() << " -> " << ctx.imgDirRel << "/" << name << "\n";
+        std::tie(w, h) = imageDims(src);  // pre-compression estimate
     } else {
         fs::create_directories(destDir);
         fs::copy_file(src, dest, fs::copy_options::overwrite_existing);
         compressImage(dest, false);
+        std::tie(w, h) = imageDims(dest);
     }
+    string dims = (w > 0 && h > 0)
+        ? " width=\"" + std::to_string(w) + "\" height=\"" + std::to_string(h) + "\""
+        : "";
     return "<img src=\"{{site.baseurl}}/" + ctx.imgDirRel + "/" + name +
-           "\" alt=\"" + alt + "\" loading=\"lazy\" decoding=\"async\">";
+           "\" alt=\"" + alt + "\" loading=\"lazy\" decoding=\"async\"" + dims + ">";
 }
 
 // rewrite ![alt](path) and <img src="path"> that point at local files
@@ -342,10 +356,12 @@ static string promoteInlineMath(const string& body) {
 
 // ------------------------------------------------------------- generation --
 
-static string buildFrontMatter(const string& title, const string& tags, bool math) {
+static string buildFrontMatter(const string& title, const string& tags, bool math,
+                               const string& thumb = "") {
     std::ostringstream fm;
     fm << "---\nlayout: post\ntitle: " << title << "\ntags: [" << tags << "]\n";
     if (math) fm << "math: true\n";
+    if (!thumb.empty()) fm << "thumb: " << thumb << "\n";
     fm << "---\n\n";
     return fm.str();
 }
@@ -454,7 +470,22 @@ int main(int argc, char** argv) {
         body = processImages(body, ctx);
     }
 
-    string post = buildFrontMatter(title, opt.tags, math) + trim(body) + "\n";
+    // index-card thumbnail from the first imported image
+    string thumb;
+    if (!ctx.usedNames.empty()) {
+        thumb = "/" + ctx.imgDirRel + "/thumb.jpg";
+        fs::path first = repoRoot / ctx.imgDirRel / ctx.usedNames.front();
+        fs::path thumbPath = repoRoot / ctx.imgDirRel / "thumb.jpg";
+        if (opt.dryRun) {
+            std::cout << "  [would create] " << thumb << "\n";
+        } else {
+            std::system(("sips --resampleWidth 480 -s format jpeg -s formatOptions 70 " +
+                         shellQuote(first.string()) + " --out " + shellQuote(thumbPath.string()) +
+                         " >/dev/null").c_str());
+        }
+    }
+
+    string post = buildFrontMatter(title, opt.tags, math, thumb) + trim(body) + "\n";
 
     // paths to hand to git when --publish is set
     std::vector<string> publishPaths{"_posts/" + postName + ".md"};
