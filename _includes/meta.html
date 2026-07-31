@@ -1,18 +1,16 @@
     <meta charset="utf-8" />
-    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
 
-    {% if page.excerpt %}
-    <meta name="description" content="{{ page.excerpt| strip_html }}" />
-    <meta property="og:description" content="{{ page.excerpt| strip_html }}" />
+    {%- comment -%}
+      title / description / canonical / og:title / twitter:* are emitted by
+      jekyll-seo-tag ({% seo %} in the layout). Only og:image is ours: prefer
+      the post thumbnail, fall back to the site avatar.
+    {%- endcomment -%}
+    {% if page.thumb %}
+      {% assign share_image = page.thumb | prepend: site.baseurl | prepend: site.url %}
     {% else %}
-    <meta name="description" content="{{ site.description }}">
-    <meta property="og:description" content="{{ site.description }}" />
+      {% assign share_image = site.avatar %}
     {% endif %}
-    <meta name="author" content="{{ site.name }}" />
-
-    {% if page.title %}
-    <meta property="og:title" content="{{ page.title }}" />
-    <meta property="twitter:title" content="{{ page.title }}" />
-    {% endif %}
+    <meta property="og:image" content="{{ share_image }}" />
+    <meta name="twitter:image" content="{{ share_image }}" />
