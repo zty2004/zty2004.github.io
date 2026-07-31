@@ -3,10 +3,10 @@
 // VARIABLES
 //
 
-// Brand colors — soft sakura theme for「咲かない花」
-$accent: #d4738a;        // sakura pink
-$accentDark: #b85570;
-$accentSoft: #fbeef1;
+// Brand colors — Monet "Impression, Sunrise/Sunset" theme
+$accent: #de764a;        // misty sun orange
+$accentDark: #c05430;
+$accentSoft: #fbeee2;    // warm haze
 $blue: #4183C4;          // kept for legacy references
 
 // Monet palette — dreamy water-lily blues for buttons
@@ -26,13 +26,13 @@ $lightGray: #ececef;
 $white: #fff;
 
 // Surfaces
-$bg: #faf9f8;            // warm paper background
+$bg: #faf6f0;            // warm morning-mist background
 $card: #ffffff;
 $border: rgba(0, 0, 0, 0.07);
 
-// Dark mode counterparts
-$bgDark: #16161a;
-$cardDark: #1e1e24;
+// Dark mode counterparts — dusk over the harbor
+$bgDark: #171b26;
+$cardDark: #212736;
 $textDark: #d8d8de;
 $borderDark: rgba(255, 255, 255, 0.09);
 
@@ -41,6 +41,7 @@ $helvetica: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
             "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
 $helveticaNeue: $helvetica;
 $georgia: Georgia, "Songti SC", "Noto Serif SC", serif;
+$cursive: "Great Vibes", "Snell Roundhand", cursive;
 
 // Shadows
 $shadowSm: 0 1px 3px rgba(20, 20, 30, 0.06);
