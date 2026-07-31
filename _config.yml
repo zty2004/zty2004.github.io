@@ -67,6 +67,10 @@ baseurl: ""
 
 permalink: /:title/
 
+# Pages live in _pages/ (underscore dirs are excluded by default)
+include:
+  - _pages
+
 # The release of Jekyll Now that you're using
 version: v1.2.0
 
