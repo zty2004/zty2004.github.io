@@ -1,0 +1,37 @@
+{%- comment -%}
+  BlogPosting structured data for post pages (helps Google show rich results).
+  Emitted only for posts; other pages rely on jekyll-seo-tag's WebSite schema.
+{%- endcomment -%}
+{% if page.layout == 'post' %}
+{% if page.thumb %}
+  {% assign schema_image = page.thumb | prepend: site.baseurl | prepend: site.url %}
+{% else %}
+  {% assign schema_image = site.avatar %}
+{% endif %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": {{ page.title | jsonify }},
+  "datePublished": "{{ page.date | date_to_xmlschema }}",
+  "dateModified": "{{ page.date | date_to_xmlschema }}",
+  "url": "{{ page.url | prepend: site.baseurl | prepend: site.url }}",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "{{ page.url | prepend: site.baseurl | prepend: site.url }}"
+  },
+  "image": {{ schema_image | jsonify }},
+  "keywords": {{ page.tags | join: ', ' | jsonify }},
+  "description": {{ page.excerpt | default: site.description | strip_html | strip_newlines | truncate: 200 | jsonify }},
+  "author": {
+    "@type": "Person",
+    "name": {{ site.author.name | default: site.name | jsonify }},
+    "url": "{{ site.url }}{{ site.baseurl }}/tianyouzuo/"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": {{ site.author.name | default: site.name | jsonify }}
+  }
+}
+</script>
+{% endif %}
