@@ -29,7 +29,9 @@
     <script>
       window.MathJax = {
         tex: {
-          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          // kramdown emits \(...\) inline and \[...\] display from $$...$$ sources;
+          // single $ is intentionally NOT a delimiter (kramdown mangles its content)
+          inlineMath: [['\\(', '\\)']],
           displayMath: [['$$', '$$'], ['\\[', '\\]']],
           processEscapes: true
         },

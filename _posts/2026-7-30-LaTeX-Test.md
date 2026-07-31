@@ -9,8 +9,8 @@ This post verifies the MathJax setup and doubles as a template for future math p
 
 ## Inline math
 
-The famous identity $e^{i\pi} + 1 = 0$ connects five fundamental constants.
-Given a matrix $A \in \mathbb{R}^{m \times n}$, its spectral norm is $\|A\|_2 = \sigma_{\max}(A)$.
+The famous identity $$e^{i\pi} + 1 = 0$$ connects five fundamental constants.
+Given a matrix $$A \in \mathbb{R}^{m \times n}$$, its spectral norm is $$\|A\|_2 = \sigma_{\max}(A)$$.
 
 ## Display math
 
@@ -50,3 +50,6 @@ $$
 $$
 
 To enable math on a post, add `math: true` to its front matter.
+Always use `$$...$$` for both inline and display math — kramdown protects the
+content from Markdown parsing and picks inline/display automatically by context.
+Single `$...$` is NOT safe: kramdown eats `\|` and underscores before MathJax runs.
