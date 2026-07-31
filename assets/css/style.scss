@@ -1158,6 +1158,23 @@ footer {
 }
 
 /*********************/
+/* LIGHTBOX          */
+/*********************/
+
+// medium-zoom must float above the sticky masthead (100) and theme switch (200)
+.medium-zoom-overlay {
+  z-index: 300;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+img.medium-zoom-image--opened {
+  z-index: 301;
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+/*********************/
 /* MATH (MathJax)    */
 /*********************/
 
