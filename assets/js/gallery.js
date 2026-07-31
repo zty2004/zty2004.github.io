@@ -126,6 +126,9 @@
         var slotW = wide ? colW * 2 + GAP : colW;
         var h = slotW * ratioOf(cell.querySelector('img'));
         cell.style.gridRowEnd = 'span ' + Math.max(2, Math.round((h + GAP) / (ROW + GAP)));
+        // tell the browser how tall an off-screen tile is, so content-visibility
+        // can skip it without the scrollbar jumping around
+        cell.style.containIntrinsicSize = Math.round(h) + 'px';
 
         // tilt: -1.6deg .. +1.6deg, plus a hair of vertical drift.
         // A single-column view is "inspect one photo" mode — keep those straight.
@@ -138,13 +141,54 @@
 
     function layoutAll() { builtGrids.forEach(layout); }
 
+    var reduceMotion = !!(window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+    // FLIP: remember where the visible tiles are, relayout, then animate each
+    // one from its old box to the new one. Only on-screen tiles are animated —
+    // the rest just snap, which keeps a 300-photo wall responsive.
+    function animateRelayout(apply) {
+      if (reduceMotion || typeof Element.prototype.animate !== 'function') {
+        apply();
+        return;
+      }
+      var tiles = [];
+      builtGrids.forEach(function (g) {
+        Array.prototype.forEach.call(g.children, function (c) {
+          var r = c.getBoundingClientRect();
+          if (r.bottom > -200 && r.top < window.innerHeight + 200) {
+            tiles.push({ el: c, first: r });
+          }
+        });
+      });
+
+      apply();
+
+      tiles.forEach(function (t) {
+        var last = t.el.getBoundingClientRect();
+        var dx = t.first.left - last.left;
+        var dy = t.first.top - last.top;
+        var sx = last.width ? t.first.width / last.width : 1;
+        var sy = last.height ? t.first.height / last.height : 1;
+        if (Math.abs(dx) < 1 && Math.abs(dy) < 1 &&
+            Math.abs(sx - 1) < 0.01 && Math.abs(sy - 1) < 0.01) return;
+        t.el.animate([
+          { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(' + sx + ',' + sy + ')',
+            opacity: 0.75 },
+          { transform: 'none', opacity: 1 },
+        ], { duration: 340, easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)' });
+      });
+    }
+
     function setCols(n, zoomEl) {
       n = Math.min(MAX_COLS, Math.max(MIN_COLS, n));
       if (n === cols) return;
-      cols = n;
-      try { localStorage.setItem('galleryCols', String(cols)); } catch (e) {}
-      builtGrids.forEach(function (g) { g.style.setProperty('--cols', cols); });
-      layoutAll();
+      animateRelayout(function () {
+        cols = n;
+        try { localStorage.setItem('galleryCols', String(cols)); } catch (e) {}
+        builtGrids.forEach(function (g) { g.style.setProperty('--cols', cols); });
+        layoutAll();
+      });
       if (zoomEl) zoomEl.textContent = cols;
     }
 
@@ -167,13 +211,21 @@
       bar.querySelector('.gz-out').addEventListener('click', function () { setCols(cols + 1, valueEl); });
 
       // --- trackpad pinch / Cmd+wheel: the browser reports ctrlKey ---
+      // A pinch fires a burst of small deltas, so accumulate and only step once
+      // a meaningful amount of movement has happened.
+      var accum = 0;
+      var STEP = 90;
       grid.addEventListener('wheel', function (e) {
         if (!e.ctrlKey && !e.metaKey) return;   // plain scrolling must still scroll
         e.preventDefault();
-        setCols(cols + (e.deltaY > 0 ? 1 : -1), valueEl);
+        accum += e.deltaY;
+        if (Math.abs(accum) < STEP) return;
+        setCols(cols + (accum > 0 ? 1 : -1), valueEl);
+        accum = 0;
       }, { passive: false });
 
       // --- touchscreen pinch ---
+      // one step per 35% change in finger spread, re-baselining after each step
       var startDist = 0, startCols = cols;
       function spread(t) {
         var dx = t[0].clientX - t[1].clientX, dy = t[0].clientY - t[1].clientY;
@@ -188,7 +240,15 @@
         if (e.touches.length !== 2 || !startDist) return;
         e.preventDefault();
         var scale = spread(e.touches) / startDist;
-        setCols(Math.round(startCols / scale), valueEl);
+        if (scale > 1.35) {
+          setCols(startCols - 1, valueEl);
+          startDist = spread(e.touches);
+          startCols = cols;
+        } else if (scale < 0.74) {
+          setCols(startCols + 1, valueEl);
+          startDist = spread(e.touches);
+          startCols = cols;
+        }
       }, { passive: false });
       grid.addEventListener('touchend', function () { startDist = 0; }, { passive: true });
     });
