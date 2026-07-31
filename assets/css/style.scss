@@ -1210,6 +1210,107 @@ footer {
 }
 
 /*********************/
+/* PROGRESS & KEYS   */
+/*********************/
+
+// reading progress: a sunset-gradient line pinned above the masthead
+.read-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 250;
+  pointer-events: none;
+
+  span {
+    display: block;
+    height: 100%;
+    transform: scaleX(0);
+    transform-origin: left;
+    background: linear-gradient(90deg, #f2c777, $accent, $monetLavender, $monetBlue);
+    transition: transform 0.1s linear;
+  }
+}
+
+// keyboard shortcut cheat sheet (opened with ?)
+.shortcut-help {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(20, 20, 30, 0.45);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+
+  &.open { display: flex; }
+
+  .shortcut-help-panel {
+    min-width: 320px;
+    max-width: 90vw;
+    padding: 22px 26px;
+    background: $card;
+    border: 1px solid $border;
+    border-radius: 14px;
+    box-shadow: $shadowLg;
+
+    @include darkmode {
+      background: $cardDark;
+      border-color: $borderDark;
+    }
+  }
+
+  h3 {
+    margin: 0 0 14px;
+    font-size: 17px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  td {
+    padding: 5px 0;
+    color: $gray;
+
+    &:first-child {
+      width: 110px;
+      white-space: nowrap;
+    }
+  }
+
+  kbd {
+    display: inline-block;
+    min-width: 20px;
+    padding: 1px 6px;
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: 12px;
+    text-align: center;
+    color: $darkGray;
+    background: rgba(110, 110, 120, 0.12);
+    border: 1px solid $border;
+    border-radius: 5px;
+
+    @include darkmode {
+      color: $textDark;
+      background: rgba(255, 255, 255, 0.08);
+      border-color: $borderDark;
+    }
+  }
+
+  .shortcut-help-hint {
+    margin: 14px 0 0;
+    font-size: 12px;
+    color: $gray;
+    text-align: right;
+  }
+}
+
+/*********************/
 /* MERMAID           */
 /*********************/
 
