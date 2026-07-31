@@ -416,11 +416,12 @@ static string promoteInlineMath(const string& body) {
 // ------------------------------------------------------------- generation --
 
 static string buildFrontMatter(const string& title, const string& tags, bool math,
-                               const string& thumb = "") {
+                               const string& thumb = "", bool gallery = false) {
     std::ostringstream fm;
     fm << "---\nlayout: post\ntitle: " << title << "\ntags: [" << tags << "]\n";
     if (math) fm << "math: true\n";
     if (!thumb.empty()) fm << "thumb: " << thumb << "\n";
+    if (gallery) fm << "gallery: true\n";
     fm << "---\n\n";
     return fm.str();
 }
@@ -547,7 +548,9 @@ int main(int argc, char** argv) {
         }
     }
 
-    string post = buildFrontMatter(title, opt.tags, math, thumb) + trim(body) + "\n";
+    // photo-album posts render as a grid with the custom lightbox
+    string post = buildFrontMatter(title, opt.tags, math, thumb, opt.photosMode)
+                  + trim(body) + "\n";
 
     // paths to hand to git when --publish is set
     std::vector<string> publishPaths{"_posts/" + postName + ".md"};
