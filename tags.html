@@ -1,0 +1,40 @@
+---
+layout: default
+title: Tags
+permalink: /tags/
+---
+
+<div class="tags-page">
+
+  <h1 class="tags-page-title">🏷️ Tags</h1>
+
+  <!-- Tag cloud: font size scales with post count -->
+  <div class="tag-cloud">
+    {% assign sorted_tags = site.tags | sort %}
+    {% for tag in sorted_tags %}
+      {% assign tag_name = tag[0] %}
+      {% assign post_count = tag[1] | size %}
+      <a class="tag-cloud-item" href="#{{ tag_name | slugify }}"
+         style="font-size: {{ post_count | times: 3 | plus: 14 }}px;">
+        {{ tag_name }}<sup>{{ post_count }}</sup>
+      </a>
+    {% endfor %}
+  </div>
+
+  <!-- Posts grouped by tag -->
+  {% for tag in sorted_tags %}
+    {% assign tag_name = tag[0] %}
+    <section class="tag-group" id="{{ tag_name | slugify }}">
+      <h2># {{ tag_name }}</h2>
+      <ul class="tag-post-list">
+        {% for post in tag[1] %}
+          <li>
+            <span class="date">{{ post.date | date: "%Y.%m.%d" }}</span>
+            <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endfor %}
+
+</div>

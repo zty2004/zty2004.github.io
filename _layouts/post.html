@@ -8,6 +8,13 @@ layout: default
   <div class="date">
     {{ page.date | date: "%Y年%-m月%-d日" }}
   </div>
+  {% if page.tags.size > 0 %}
+  <div class="post-tags">
+    {% for tag in page.tags %}
+    <a class="post-tag" href="{{ site.baseurl }}/tags/#{{ tag | slugify }}">#{{ tag }}</a>
+    {% endfor %}
+  </div>
+  {% endif %}
 
   <div class="entry">
     {{ content }}

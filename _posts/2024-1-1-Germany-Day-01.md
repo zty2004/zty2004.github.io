@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Germany Day 01
+tags: [travel, germany]
 ---
 
 经历了快一整天的飞行，终于到达了德国。
