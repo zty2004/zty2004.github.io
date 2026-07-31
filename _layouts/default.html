@@ -18,9 +18,7 @@
       <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet" />
+    <link rel="preload" href="{{ site.baseurl }}/assets/fonts/great-vibes-subset.woff2" as="font" type="font/woff2" crossorigin />
 
     <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}/assets/css/style.css" />
 
@@ -130,34 +128,63 @@
     </script>
 
     {% if site.busuanzi %}
-    <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <script>
+      // visitor counters are decorative: load them once the page goes idle
+      (function () {
+        function load() {
+          var s = document.createElement('script');
+          s.src = 'https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js';
+          s.async = true;
+          document.body.appendChild(s);
+        }
+        if ('requestIdleCallback' in window) requestIdleCallback(load, { timeout: 3000 });
+        else setTimeout(load, 2000);
+      })();
+    </script>
     {% endif %}
 
-    <!-- Lightbox for post photos (medium-zoom, ~3KB) -->
-    <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js"></script>
     <script defer src="{{ site.baseurl }}/assets/js/post-enhance.js"></script>
+
+    <!-- Lightbox: medium-zoom is fetched on the first image click, not upfront -->
     <script>
-      window.addEventListener('DOMContentLoaded', function () {
-        if (typeof mediumZoom !== 'function') return;
-        if (document.querySelector('.posts')) return; // index page: cards link to posts instead
-        // skip images wrapped in links; <picture> wrappers are fine
-        var imgs = Array.prototype.filter.call(
-          document.querySelectorAll('article.post > .entry img'),
-          function (img) { return !img.closest('a'); }
-        );
-        if (!imgs.length) return;
+      (function () {
+        if (document.querySelector('.posts')) return; // index cards link to posts
+        var entry = document.querySelector('article.post > .entry');
+        if (!entry) return;
 
         function overlayBg() {
           return document.documentElement.getAttribute('data-theme') === 'dark'
             ? 'rgba(23, 27, 38, 0.92)'   // dusk harbor
             : 'rgba(250, 246, 240, 0.94)'; // morning mist
         }
-        var zoom = mediumZoom(imgs, { background: overlayBg(), margin: 24 });
 
-        new MutationObserver(function () {
-          zoom.update({ background: overlayBg() });
-        }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-      });
+        var loading = false, zoom = null;
+        entry.addEventListener('click', function (e) {
+          var img = e.target.closest('img');
+          if (!img || img.closest('a')) return;
+
+          if (zoom) return;              // already initialized; medium-zoom handles it
+          if (loading) return;
+          loading = true;
+
+          var s = document.createElement('script');
+          s.src = 'https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js';
+          s.onload = function () {
+            var imgs = Array.prototype.filter.call(
+              entry.querySelectorAll('img'),
+              function (i) { return !i.closest('a'); }
+            );
+            zoom = mediumZoom(imgs, { background: overlayBg(), margin: 24 });
+            zoom.open({ target: img });   // honour the click that triggered the load
+            new MutationObserver(function () {
+              zoom.update({ background: overlayBg() });
+            }).observe(document.documentElement,
+                       { attributes: true, attributeFilter: ['data-theme'] });
+          };
+          s.onerror = function () { loading = false; };
+          document.body.appendChild(s);
+        });
+      })();
     </script>
 
     {% include analytics.html %}
