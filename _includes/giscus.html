@@ -25,7 +25,25 @@
       s.setAttribute('data-theme', giscusTheme());
       s.setAttribute('data-lang', 'zh-CN');
       s.setAttribute('data-loading', 'lazy');
-      document.querySelector('.giscus').appendChild(s);
+
+      // only fetch giscus once the reader approaches the comment section
+      var mount = document.querySelector('.giscus');
+      function inject() {
+        if (mount.dataset.loaded) return;
+        mount.dataset.loaded = '1';
+        mount.appendChild(s);
+      }
+      if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function (entries) {
+          if (entries.some(function (e) { return e.isIntersecting; })) {
+            io.disconnect();
+            inject();
+          }
+        }, { rootMargin: '200px' });
+        io.observe(mount);
+      } else {
+        inject();
+      }
 
       // re-theme the giscus iframe when the user flips the theme switch
       new MutationObserver(function () {
