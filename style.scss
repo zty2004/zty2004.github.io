@@ -1139,6 +1139,19 @@ footer {
 }
 
 /*********************/
+/* MATH (MathJax)    */
+/*********************/
+
+// formulas inherit theme color automatically; just handle overflow
+mjx-container[display="true"] {
+  display: block;
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
+  padding: 4px 0;
+}
+
+/*********************/
 /* TAGS              */
 /*********************/
 
