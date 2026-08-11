@@ -22,9 +22,10 @@ permalink: /
         <li><a href="mailto:fztym@sjtu.edu.cn">✉️ Email</a></li>
         <li><a href="https://github.com/zty2004" target="_blank" rel="noopener">GitHub</a></li>
         <li><a href="{{ site.baseurl }}/blogs/">Blog</a></li>
-        <!-- Restore these once the links are ready:
+        <!-- built and published by the CV repo's release workflow -->
+        <li><a href="{{ site.cv_url }}" target="_blank" rel="noopener">📄 CV</a></li>
+        <!-- Restore once the link is ready:
         <li><a href="#" target="_blank" rel="noopener">Google Scholar</a></li>
-        <li><a href="#" target="_blank" rel="noopener">CV</a></li>
         -->
       </ul>
     </div>
