@@ -2,13 +2,9 @@
 #
 # sync_cv.sh — refresh the local CV copy from the CV repo's latest release.
 #
-# The profile page links to assets/pdf/cv.pdf rather than straight to the
-# release asset: GitHub sends release downloads with
-# `Content-Disposition: attachment`, which makes the browser download the file
-# instead of displaying it. GitHub Pages serves the same PDF inline, so the
-# link opens in a new tab and just shows the CV.
-#
-# Run this after the CV repo publishes a new build, then commit the result.
+# Normally you do NOT need this: .github/workflows/sync-cv.yml keeps
+# assets/pdf/cv.pdf up to date automatically. Keep this script for when you want
+# the newest CV on the site right now without waiting for the scheduled run.
 #
 # Usage: ./scripts/sync_cv.sh
 
