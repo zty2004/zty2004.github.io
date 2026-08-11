@@ -1,0 +1,73 @@
+name: Sync CV
+
+# Keeps assets/pdf/cv.pdf in step with the latest release of the CV repo.
+#
+# Why a copy at all: GitHub serves release assets with
+# `Content-Disposition: attachment` and without CORS headers, so the browser
+# always downloads them and JavaScript cannot fetch them either. A copy served
+# by GitHub Pages carries `Content-Type: application/pdf` and therefore opens
+# inline in a new tab.
+#
+# Triggers:
+#   * every 6 hours  — no setup needed anywhere
+#   * manually       — Actions tab -> Sync CV -> Run workflow
+#   * repository_dispatch (type: cv-updated) — for instant updates, have the CV
+#     repo's build workflow finish with:
+#
+#       - name: Refresh the website copy
+#         run: |
+#           curl -fsS -X POST \
+#             -H "Authorization: Bearer ${{ secrets.SITE_DISPATCH_TOKEN }}" \
+#             -H "Accept: application/vnd.github+json" \
+#             https://api.github.com/repos/zty2004/zty2004.github.io/dispatches \
+#             -d '{"event_type":"cv-updated"}'
+#
+#     where SITE_DISPATCH_TOKEN is a fine-grained PAT with
+#     "Contents: read and write" on zty2004/zty2004.github.io.
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+  repository_dispatch:
+    types: [cv-updated]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-cv
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download the latest CV
+        run: |
+          curl -fsSL --retry 3 --retry-delay 5 \
+            "https://github.com/zty2004/CV/releases/download/latest/cv.pdf" \
+            -o /tmp/cv.pdf
+          # a 404 page or an error would otherwise be committed as "the CV"
+          if [ "$(head -c 5 /tmp/cv.pdf)" != "%PDF-" ]; then
+            echo "::error::downloaded file is not a PDF — is the release published?"
+            exit 1
+          fi
+          echo "downloaded $(wc -c < /tmp/cv.pdf) bytes"
+
+      - name: Commit when the CV changed
+        run: |
+          mkdir -p assets/pdf
+          if [ -f assets/pdf/cv.pdf ] && cmp -s /tmp/cv.pdf assets/pdf/cv.pdf; then
+            echo "CV is already up to date — nothing to commit"
+            exit 0
+          fi
+          cp /tmp/cv.pdf assets/pdf/cv.pdf
+          git config user.name  'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add assets/pdf/cv.pdf
+          git commit -m 'chore. sync latest CV from the CV repo [skip ci]'
+          git push
+          echo "CV updated — GitHub Pages will rebuild automatically"
