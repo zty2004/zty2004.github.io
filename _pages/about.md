@@ -22,8 +22,8 @@ permalink: /
         <li><a href="mailto:fztym@sjtu.edu.cn">✉️ Email</a></li>
         <li><a href="https://github.com/zty2004" target="_blank" rel="noopener">GitHub</a></li>
         <li><a href="{{ site.baseurl }}/blogs/">Blog</a></li>
-        <!-- built and published by the CV repo's release workflow -->
-        <li><a href="{{ site.cv_url }}" target="_blank" rel="noopener">📄 CV</a></li>
+        <!-- served from this site so it opens inline in a new tab -->
+        <li><a href="{{ site.baseurl }}{{ site.cv_url }}" target="_blank" rel="noopener">📄 CV</a></li>
         <!-- Restore once the link is ready:
         <li><a href="#" target="_blank" rel="noopener">Google Scholar</a></li>
         -->

@@ -11,9 +11,12 @@ description: La couleur est ma joie et mon tourment
 # URL of your avatar or profile pic (you could use your GitHub profile pic)
 avatar: https://avatars.githubusercontent.com/u/63768343?s=96&v=4
 
-# CV, built and published by the release workflow in the CV repo.
-# The repo must be public for visitors to download it.
-cv_url: https://github.com/zty2004/CV/releases/download/latest/cv.pdf
+# CV. The copy under assets/pdf/ is what visitors open: GitHub serves release
+# assets with `Content-Disposition: attachment`, which forces a download instead
+# of showing the PDF, while GitHub Pages serves it inline.
+# Refresh the local copy with scripts/sync_cv.sh after the CV repo rebuilds.
+cv_url: /assets/pdf/cv.pdf
+cv_source: https://github.com/zty2004/CV/releases/download/latest/cv.pdf
 
 #
 # Flags below are optional
