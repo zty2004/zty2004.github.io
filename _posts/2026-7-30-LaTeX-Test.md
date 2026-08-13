@@ -1,7 +1,8 @@
 ---
 layout: post
 title: Feature Test — Math, TOC & Code
-tags: [math, test]
+tags: [math, test, hidden]
+sitemap: false
 math: true
 mermaid: true
 ---

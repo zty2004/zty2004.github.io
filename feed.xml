@@ -20,7 +20,14 @@ permalink: /feed.xml
     <language>zh-CN</language>
     <lastBuildDate>{{ site.time | date_to_rfc822 }}</lastBuildDate>
     <generator>Jekyll {{ jekyll.version }}</generator>
-    {%- for post in site.posts limit: 20 %}
+    {%- comment -%} posts tagged `hidden` are not syndicated {%- endcomment -%}
+    {%- assign listed = '' | split: '' -%}
+    {%- for post in site.posts -%}
+      {%- unless post.tags contains 'hidden' -%}
+        {%- assign listed = listed | push: post -%}
+      {%- endunless -%}
+    {%- endfor -%}
+    {%- for post in listed limit: 20 %}
     <item>
       <title>{{ post.title | xml_escape }}</title>
       <link>{{ post.url | prepend: root }}</link>

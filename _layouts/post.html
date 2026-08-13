@@ -5,13 +5,19 @@ layout: default
 <article class="post"{% if page.gallery %} data-gallery="true"{% endif %}>
   <h1>{{ page.title }}</h1>
 
+  {% if page.tags contains 'hidden' %}
+  <p class="unlisted-note">⚡️ 未公开列出：本文不出现在文章列表、标签页、搜索与 RSS 中，仅可通过链接访问。</p>
+  {% endif %}
+
   <div class="date">
     {{ page.date | date: "%Y年%-m月%-d日" }}
   </div>
   {% if page.tags.size > 0 %}
   <div class="post-tags">
     {% for tag in page.tags %}
+    {% unless tag == 'hidden' %}
     <a class="post-tag" href="{{ site.baseurl }}/tags/?tags={{ tag | uri_escape }}">#{{ tag }}</a>
+    {% endunless %}
     {% endfor %}
   </div>
   {% endif %}
