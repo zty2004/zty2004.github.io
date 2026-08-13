@@ -736,6 +736,22 @@ nav {
     color: $gray;
   }
 
+  // banner on posts tagged `hidden` (reachable by link, absent from listings)
+  .unlisted-note {
+    margin: 0 0 14px;
+    padding: 8px 14px;
+    font-size: 13.5px;
+    color: $accentDark;
+    background: rgba(222, 118, 74, 0.09);
+    border-left: 3px solid $accent;
+    border-radius: 0 8px 8px 0;
+
+    @include darkmode {
+      color: #f0a883;
+      background: rgba(222, 118, 74, 0.14);
+    }
+  }
+
   .read-more {
     display: inline-block;
     margin-top: 16px;
