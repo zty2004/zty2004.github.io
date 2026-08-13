@@ -13,7 +13,9 @@ what the object *is* in memory, what it costs, and how it fails numerically.
 
 **Part 1** fixes the vocabulary: vectors, matrices, functions, inner
 products and norms, and derivatives (gradient, Jacobian, Hessian), plus a
-handful of objects that show up on nearly every page of an ML paper.
+handful of objects that show up on nearly every page of an ML paper. It ends
+with one worked example that uses almost all of it: deriving the Gated
+DeltaNet state update from a squared-error loss.
 
 ## Conventions
 
@@ -312,6 +314,19 @@ The first is the Mahalanobis / natural-gradient inner product — it encodes
 "which directions count as large". The second treats matrices as vectors and
 is what weight decay penalizes.
 
+One consequence of the Frobenius product deserves its own line, because it is
+why outer products appear in every learning rule:
+
+$$
+\langle x, A y \rangle = x^\top A y = \mathrm{tr}(A^\top x y^\top) = \langle A, x y^\top \rangle_F .
+$$
+
+Read it as a change of viewpoint: pairing a vector $x$ against "$A$ applied
+to $y$" is the same as pairing the whole matrix $A$ against the rank-one
+matrix $x y^\top$. Being able to move between those two readings *is* matrix
+calculus, as the [derivative section](#gradients-with-respect-to-a-matrix)
+will show.
+
 ### Induced norm and Cauchy–Schwarz
 
 Every inner product induces a norm $\lVert x \rVert = \sqrt{\langle x, x \rangle}$, and
@@ -455,6 +470,46 @@ same space. (Strictly, the gradient depends on the inner product; with the
 standard one we get the familiar formula, and with $\langle\cdot,\cdot\rangle_M$
 we get the natural gradient $M^{-1}\nabla f$.)
 
+#### Reading a gradient off the first-order term
+
+The definition above is also a recipe, and a more reliable one than
+memorized tables: **expand $f(x+h)$, keep the term linear in $h$, write it as
+$\langle g, h \rangle$, and $g$ is the gradient.** Two instances we will need
+later.
+
+First, $f(x) = x^\top x$. Expanding costs one line:
+
+$$
+f(x + h) = (x + h)^\top (x + h) = x^\top x + 2 x^\top h + h^\top h .
+$$
+
+The last term is $\lVert h \rVert^2 = o(\lVert h \rVert)$, so the linear part
+is $2 x^\top h = \langle 2x, h \rangle$ and therefore
+
+$$
+\nabla_x \, x^\top x = 2x, \qquad \nabla_x \tfrac{1}{2} \lVert x \rVert^2 = x .
+$$
+
+Second, $f(x) = \frac{1}{2} \lVert Ax - b \rVert^2$. Put $r = Ax - b$; then
+perturbing $x$ by $h$ perturbs the residual by $Ah$, and
+
+$$
+f(x + h) = \tfrac{1}{2} \lVert r + Ah \rVert^2
+= f(x) + \langle r, Ah \rangle + \tfrac{1}{2} \lVert Ah \rVert^2 .
+$$
+
+Now the one move that matters: push $A$ off the second argument and onto the
+first, $\langle r, Ah \rangle = \langle A^\top r, h \rangle$. The linear term
+is now in the shape $\langle g, h \rangle$, so
+
+$$
+\nabla f(x) = A^\top r = A^\top (Ax - b) .
+$$
+
+That transpose was not pulled from a table — it is the *adjoint* of the map
+$h \mapsto Ah$, and every transpose in every backprop formula arrives the same
+way.
+
 ### Directional derivative and steepest descent
 
 $$
@@ -497,6 +552,52 @@ flowchart LR
     H1 -.->|"vᵀ J_1"| X
 ```
 
+### Gradients with respect to a matrix
+
+Parameters are usually matrices, so we need $\nabla_W f$ for
+$f : \mathbb{R}^{m \times n} \to \mathbb{R}$. Conceptually nothing is new:
+$\mathbb{R}^{m \times n}$ is a vector space, and equipped with the Frobenius
+inner product the definition of the derivative reads
+
+$$
+f(W + H) = f(W) + \langle \nabla_W f, H \rangle_F + o(\lVert H \rVert_F) ,
+$$
+
+so $\nabla_W f$ is the unique matrix *of the same shape as $W$* that pairs
+with a perturbation $H$ to give the first-order change. The recipe is the one
+from the previous section, with the rank-one pairing doing the bookkeeping.
+
+Here is the case we need in the closing section. Let
+$S \in \mathbb{R}^{d_v \times d_k}$, $k \in \mathbb{R}^{d_k}$,
+$v \in \mathbb{R}^{d_v}$, and
+
+$$
+L(S) = \frac{1}{2} \lVert v - S k \rVert^2 .
+$$
+
+Write $r = v - Sk$ for the residual. Perturbing $S \to S + H$ perturbs the
+prediction by $Hk$, hence the residual by $-Hk$:
+
+$$
+\begin{aligned}
+L(S + H) &= \tfrac{1}{2} \lVert r - Hk \rVert^2 \\
+&= \tfrac{1}{2} \lVert r \rVert^2 - \langle r, Hk \rangle + \tfrac{1}{2} \lVert Hk \rVert^2 \\
+&= L(S) + \big\langle -r k^\top, \, H \big\rangle_F + o(\lVert H \rVert_F) ,
+\end{aligned}
+$$
+
+where the third line is just $\langle r, Hk \rangle = \langle r k^\top, H \rangle_F$.
+Reading off the pairing,
+
+$$
+\nabla_S L = -(v - Sk) \, k^\top \in \mathbb{R}^{d_v \times d_k} .
+$$
+
+Shape check: $(d_v \times 1)$ times $(1 \times d_k)$ — correct, and
+**rank one** no matter how big $S$ is. That single observation is what makes
+the learning rule at the end of this post cost one outer product instead of a
+matrix multiply.
+
 ### Second order: Hessian and Taylor
 
 $$
@@ -530,6 +631,7 @@ With $a, b$ constant vectors, $A$ a constant matrix:
 | $f(W) = \lVert XW - Y \rVert_F^2$ | $\nabla_W f = 2 X^\top (XW - Y)$ |
 | $f(X) = \mathrm{tr}(AX)$ | $\nabla_X f = A^\top$ |
 | $f(X) = \log \det X$ | $\nabla_X f = X^{-\top}$ |
+| $L(S) = \frac{1}{2} \lVert v - Sk \rVert^2$ | $\nabla_S L = -(v - Sk) k^\top$ |
 | $\sigma(z) = (1 + e^{-z})^{-1}$ | $\mathrm{d}\sigma/\mathrm{d}z = \sigma(1 - \sigma)$ |
 | $p = \mathrm{softmax}(z)$ | $J = \operatorname{diag}(p) - p p^\top$ |
 
@@ -632,7 +734,204 @@ with variance $\propto 1/B$. The whole of SGD lives in that sentence.
   $10^{-8}$ to a quantity of order $1$ is a no-op, which is why optimizer
   $\varepsilon$ values sit where they do.
 
+## Worked example: the delta rule behind Gated DeltaNet
+
+Time to spend the vocabulary. The claim to derive is that the squared-error
+objective
+
+$$
+L_t(S) = \frac{1}{2} \lVert v_t - S k_t \rVert^2
+$$
+
+leads to the state update
+
+$$
+S_t = S_{t-1} + \beta_t (v_t - S_{t-1} k_t) k_t^\top ,
+$$
+
+which is the recurrence at the heart of DeltaNet and, with one extra scalar,
+of Gated DeltaNet (GDN).
+
+### The setup: a matrix as memory
+
+Let the state be a matrix $S \in \mathbb{R}^{d_v \times d_k}$ that answers a
+key with a value,
+
+$$
+\hat{v} = S k ,
+$$
+
+i.e. a **linear associative memory**. This is the row view of the
+matrix–vector product from earlier: row $i$ of $S$ is a template, and
+$\hat v_i = \langle \tilde s_i, k \rangle$ scores the key against it. The
+whole model is one linear map, and the *learning* problem is to keep updating
+that map online as new pairs $(k_t, v_t)$ arrive — without storing the past,
+unlike attention, which keeps every key and value.
+
+"Store the pair $(k_t, v_t)$" then means "make $S k_t$ close to $v_t$", and
+the least-squares way to say that is precisely $L_t$ above. Note it is a
+function of a *matrix*, which is why the groundwork on
+[matrix gradients](#gradients-with-respect-to-a-matrix) was needed.
+
+### One gradient step is the update
+
+The gradient was computed above, and it is rank one:
+
+$$
+\nabla_S L_t(S) = -(v_t - S k_t) k_t^\top .
+$$
+
+Now take a single step of gradient descent, starting from the state we
+already have and using step size $\beta_t$:
+
+$$
+\begin{aligned}
+S_t &= S_{t-1} - \beta_t \nabla_S L_t(S_{t-1}) \\
+&= S_{t-1} + \beta_t (v_t - S_{t-1} k_t) k_t^\top .
+\end{aligned}
+$$
+
+That is the whole derivation — and every symbol now has a job:
+
+- $r_t = v_t - S_{t-1} k_t$ is the **prediction error**: what the memory
+  currently answers versus what it should. This is the "delta", and the rule
+  is Widrow–Hoff's delta rule from 1960 wearing modern notation.
+- the trailing $k_t^\top$ is **not decoration**. It is the adjoint of the map
+  $H \mapsto H k_t$, i.e. the thing that converts an error living in
+  $\mathbb{R}^{d_v}$ into a correction living in $\mathbb{R}^{d_v \times d_k}$,
+  routed only to the coordinates that produced the error.
+- $\beta_t$ is a **learning rate**, so we should be able to say what value is
+  right. We can, exactly.
+
+```mermaid
+flowchart LR
+    K[key k_t] --> R["read: S_t-1 k_t"]
+    S0[state S_t-1] --> R
+    R --> E["error r_t = v_t - S_t-1 k_t"]
+    V[value v_t] --> E
+    E --> U["write: + beta_t r_t k_tᵀ"]
+    S0 --> U
+    U --> S1[state S_t]
+```
+
+### Why $\beta_t = 1$ is the natural scale
+
+$L_t$ is a convex quadratic in $S$, so we need not guess. Apply the new state
+to the very key we just wrote and use that $k_t^\top k_t = \lVert k_t \rVert^2$
+is a scalar:
+
+$$
+\begin{aligned}
+v_t - S_t k_t &= v_t - S_{t-1} k_t - \beta_t (v_t - S_{t-1} k_t) k_t^\top k_t \\
+&= \big(1 - \beta_t \lVert k_t \rVert^2\big) (v_t - S_{t-1} k_t) .
+\end{aligned}
+$$
+
+One step therefore multiplies the error on $k_t$ by
+$1 - \beta_t \lVert k_t \rVert^2$, and the consequences read off immediately:
+
+| Step size | Effect on the error |
+|---|---|
+| $\beta_t = 1/\lVert k_t \rVert^2$ | error becomes exactly $0$, so $S_t k_t = v_t$ — a perfect write |
+| $\beta_t \in (0, 1/\lVert k_t \rVert^2)$ | error shrinks but survives — a partial write |
+| $\beta_t = 2/\lVert k_t \rVert^2$ | error keeps its magnitude, flips sign — no progress |
+| $\beta_t > 2/\lVert k_t \rVert^2$ | error grows — divergence |
+
+With normalized keys, $\lVert k_t \rVert = 1$, the perfect write is simply
+$\beta_t = 1$, and $\beta_t \in (0, 1)$ interpolates: it is exactly *how much
+of the old association to overwrite*. That is why implementations put a
+sigmoid on $\beta_t$ and normalize $k_t$ — the parameterization then cannot
+leave the stable region.
+
+This also lines up with the general theory instead of contradicting it. In
+$\mathrm{vec}$ coordinates, $S k = (k^\top \otimes I) \mathrm{vec}(S)$, so
+
+$$
+L_t(S) = \tfrac{1}{2} \big\lVert v_t - (k_t^\top \otimes I) \mathrm{vec}(S) \big\rVert^2,
+\qquad
+\nabla^2 = (k_t k_t^\top) \otimes I ,
+$$
+
+whose only nonzero eigenvalue is $\lVert k_t \rVert^2$. So $L_t$ is smooth
+with constant $\lVert k_t \rVert^2$, and the step licensed by the smoothness
+argument — one over that constant — is precisely the perfect-write step above.
+(The convexity section calls that constant $\beta$; the sequence-model
+literature calls the step size $\beta_t$. Same letter, opposite roles.)
+
+### The same update, as erase-then-write
+
+Regroup the update without assuming anything:
+
+$$
+S_t = S_{t-1} \big( I - \beta_t k_t k_t^\top \big) + \beta_t v_t k_t^\top .
+$$
+
+(Expand it: the cross term is $-\beta_t S_{t-1} k_t k_t^\top$, which is what
+the previous form has.) Read this version operationally. When
+$\beta_t \lVert k_t \rVert^2 = 1$, the factor $I - \beta_t k_t k_t^\top$ is the
+[orthogonal projector](#orthogonality-and-projection) that annihilates the
+$k_t$ direction and leaves everything perpendicular to it untouched. So the
+step is literally:
+
+1. **erase** whatever the memory currently associates with $k_t$,
+2. **write** $v_t$ in the freed slot.
+
+Because the correction is rank one, no other direction in $S$ is disturbed —
+that is what makes this a memory with targeted editing, rather than a
+decaying running average like a plain linear-attention state
+($S_t = S_{t-1} + v_t k_t^\top$, which only ever accumulates).
+
+### The gate: from DeltaNet to GDN
+
+The delta rule as derived never forgets: information leaves $S$ only when
+something is written on the same key. Gated DeltaNet adds a data-dependent
+scalar decay $\alpha_t \in (0, 1)$ on the retained state:
+
+$$
+S_t = \alpha_t S_{t-1} \big( I - \beta_t k_t k_t^\top \big) + \beta_t v_t k_t^\top .
+$$
+
+The division of labour is clean, and it is why both gates exist:
+
+- $\beta_t$ — **write precision**: how completely this key is overwritten
+  (from the least-squares step-size analysis above);
+- $\alpha_t$ — **retention**: a global multiplicative forget, which is what
+  Mamba-style state-space models use and what the pure delta rule lacks.
+
+Both are emitted by the network from the current token, which is all
+"gated" means: the optimizer-like recurrence gets its step size and its decay
+from the data rather than from a hyperparameter.
+
+### What it costs
+
+Per step: one matvec $S_{t-1} k_t$, one outer product, one scaled add —
+$O(d_k d_v)$ time and $O(d_k d_v)$ memory, with **no dependence on sequence
+length**. Nothing here ever forms a Jacobian, a Hessian or an inverse, which
+is the practical payoff of the identities above: the gradient of a matrix loss
+was available in closed form as a rank-one outer product.
+
+```python
+def delta_step(S, k, v, beta, alpha=1.0):
+    """One GDN state update. alpha=1 recovers the plain delta rule."""
+    # S: (dv, dk) state    k: (dk,) key    v: (dv,) value
+    r = v - alpha * (S @ k)              # error against the retained state
+    return alpha * S + beta * np.outer(r, k)
+
+# perfect write: with alpha=1 and beta = 1/||k||^2, the key reads back exactly
+S1 = delta_step(S, k, v, beta=1.0 / (k @ k))
+assert np.allclose(S1 @ k, v)
+```
+
+The sequential form above is latency-bound on a GPU — $T$ dependent steps of
+tiny work. Production kernels therefore process a chunk of steps at once by
+unrolling the recurrence into matrix products (the WY-style representation),
+which is the associativity lesson from the matrix section reappearing as a
+throughput trick: same arithmetic, different parenthesization, orders of
+magnitude of difference.
+
 ## Next
 
 Part 2 will build on this: linear systems and least squares, then
-eigen/SVD in full, and the optimization view of training.
+eigen/SVD in full, and the optimization view of training — including what
+changes when the one-step rule above is replaced by many steps on many pairs
+at once.
