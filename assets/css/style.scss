@@ -789,6 +789,13 @@ nav {
 /* CONTENT TABLES    */
 /*********************/
 
+// numbered-theorem anchors inside posts: empty <a id="tN"> markers that a
+// [T6](#t6) citation jumps to — keep the target clear of the sticky masthead
+.entry .thm-anchor {
+  display: inline-block;
+  scroll-margin-top: 110px;
+}
+
 // kramdown pipe tables in posts and pages. The reset strips every table
 // style, so everything here is deliberate: wide column gutters plus a
 // hairline divider between columns, so dense reference tables (notation,
