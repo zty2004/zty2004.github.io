@@ -168,7 +168,11 @@ collide, and legacy inline `$$...$$` still works (kramdown rewrites it to
 `\(...\)`).
 
 One caveat for inline `$...$`: kramdown parses that text *before* MathJax
-sees it, so avoid backslash-escaped punctuation (`\,`, `\{`, `\|`, `\\`),
-straight quotes (`\sigma'`), and an `_` right after `}` or `)` — write
-`\lbrace`, `\lbrack`, `\lVert`, `\tilde a_i` instead, or move the formula
-into a `$$` block, where the content is protected verbatim.
+sees it, so avoid backslash-escaped punctuation (`\,`, `\;`, `\{`, `\|`,
+`\\`), straight quotes (`\sigma'`), a `<` directly followed by a letter (it
+looks like an HTML tag), and an `_` right after `}` or `)` — write `\lbrace`,
+`\lbrack`, `\lVert`, `\ast`, `\tilde a_i` instead, or move the formula into a
+`$$` block, where the content is protected verbatim.
+
+Also keep math out of headings: the table of contents is built from the raw
+heading text, so a heading formula shows up there unrendered.
