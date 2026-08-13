@@ -29,6 +29,7 @@ Fixing notation once saves a lot of transposes later.
 | $x_i$ | $i$-th entry of $x$; $a_{ij}$ entry of $A$ |
 | $a_j$ | $j$-th **column** of $A$ |
 | $A^\top$ | transpose |
+| $\overline{z}$, $x^\ast$ | complex conjugate, conjugate transpose |
 | $\langle x, y \rangle$ | inner product |
 | $\lVert x \rVert$ | norm (Euclidean unless subscripted) |
 | $f_\theta$ | function (model) with parameters $\theta$ |
@@ -296,6 +297,9 @@ $\langle \cdot, \cdot \rangle : V \times V \to \mathbb{R}$ that is
 2. **linear in the first argument:** $\langle \alpha x + \beta y, z \rangle = \alpha \langle x, z \rangle + \beta \langle y, z \rangle$;
 3. **positive definite:** $\langle x, x \rangle \ge 0$, with equality iff $x = 0$.
 
+(Real, because that is what we compute with; the complex case needs one
+change, spelled out in [a note below](#a-note-on-complex-vectors).)
+
 On $\mathbb{R}^n$ the standard (dot) product is
 
 $$
@@ -326,6 +330,67 @@ to $y$" is the same as pairing the whole matrix $A$ against the rank-one
 matrix $x y^\top$. Being able to move between those two readings *is* matrix
 calculus, as the [derivative section](#gradients-with-respect-to-a-matrix)
 will show.
+
+#### A note on complex vectors
+
+Everything above is stated over $\mathbb{R}$, which is where we compute
+almost all of the time. Complex vectors — elements of $\mathbb{C}^n$ —
+nevertheless turn up in Fourier transforms, in the eigenvalues of a
+non-symmetric real matrix, in rotary position embeddings and in diagonal
+state-space models, and the notation changes just enough to cause confusion
+later, so here is the dictionary.
+
+| Over $\mathbb{R}^n$ | Over $\mathbb{C}^n$ |
+|---|---|
+| transpose $x^\top$ | conjugate transpose $x^\ast = \overline{x}^\top$ (also written $x^H$ or $x^\dagger$) |
+| $\langle x, y \rangle = x^\top y = \sum_i x_i y_i$ | $\langle x, y \rangle = x^\ast y = \sum_i \overline{x_i} y_i$ |
+| $\lVert x \rVert^2 = x^\top x$ | $\lVert x \rVert^2 = x^\ast x = \sum_i \lvert x_i \rvert^2$ |
+| symmetric, $A = A^\top$ | Hermitian, $A = A^\ast$ |
+| orthogonal, $Q^\top Q = I$ | unitary, $U^\ast U = I$ |
+| spectral theorem, $A = Q \Lambda Q^\top$ | spectral theorem, $A = U \Lambda U^\ast$ |
+
+Exactly one axiom changes. Symmetry becomes **conjugate** symmetry,
+
+$$
+\langle x, y \rangle = \overline{\langle y, x \rangle} ,
+$$
+
+so the form is linear in one argument and conjugate-linear in the other
+(*sesquilinear*, "one and a half times linear") rather than bilinear. Which
+argument carries the conjugate is pure convention — physics conjugates the
+first, much of the math literature the second — and it only ever flips a bar,
+so check a paper once and move on.
+
+The reason for all the conjugation is the third axiom. Without it, lengths
+break: for $x = (1, i)^\top \in \mathbb{C}^2$,
+
+$$
+x^\top x = 1 + i^2 = 0
+\quad \text{while} \quad
+x^\ast x = \lvert 1 \rvert^2 + \lvert i \rvert^2 = 2 ,
+$$
+
+so the unconjugated form assigns length zero to a nonzero vector, and
+$\langle x, x \rangle$ is no longer even guaranteed to be real. Conjugation is
+the minimal repair that keeps $\langle x, x \rangle \ge 0$, and therefore keeps
+geometry.
+
+Once that is in place, nothing else in this post needs relearning:
+$\mathbb{C}^n$ with the Hermitian product is a perfectly ordinary inner-product
+space, and Cauchy–Schwarz, angles, orthogonality and projections all carry
+over verbatim with $\top$ replaced by $\ast$. Two practical asides worth
+remembering:
+
+- **Where the complex numbers come from.** A real *symmetric* matrix has real
+  eigenvalues, but a general real matrix does not: its complex eigenvalues
+  arrive in conjugate pairs $\lambda = re^{\pm i\theta}$, which is precisely
+  rotation by $\theta$ combined with scaling by $r$. That is why a linear
+  recurrence can oscillate, and why $\lvert \lambda \rvert < 1$ — not
+  $\lambda < 1$ — is the stability condition.
+- **Storage.** A complex number is two floats, and complex arithmetic costs
+  more per FLOP; libraries therefore keep real signals real and only pay for
+  $\mathbb{C}$ where the algorithm demands it (an FFT-based convolution, for
+  instance, pays it to turn an $O(n^2)$ operation into $O(n \log n)$).
 
 ### Induced norm and Cauchy–Schwarz
 
@@ -814,7 +879,7 @@ flowchart LR
     U --> S1[state S_t]
 ```
 
-### Why $\beta_t = 1$ is the natural scale
+### Why a step size of one is the natural scale
 
 $L_t$ is a convex quadratic in $S$, so we need not guess. Apply the new state
 to the very key we just wrote and use that $k_t^\top k_t = \lVert k_t \rVert^2$
