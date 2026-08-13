@@ -14,8 +14,8 @@ blocks with copy buttons. It also serves as a template for future posts.
 
 ### Inline math
 
-The famous identity $$e^{i\pi} + 1 = 0$$ connects five fundamental constants.
-Given a matrix $$A \in \mathbb{R}^{m \times n}$$, its spectral norm is $$\|A\|_2 = \sigma_{\max}(A)$$.
+The famous identity $e^{i\pi} + 1 = 0$ connects five fundamental constants.
+Given a matrix $A \in \mathbb{R}^{m \times n}$, its spectral norm is $\lVert A \rVert_2 = \sigma_{\max}(A)$.
 
 ### Display math
 
@@ -162,6 +162,13 @@ sequenceDiagram
 ## Writing Conventions
 
 To enable math on a post, add `math: true` to its front matter.
-Always use `$$...$$` for both inline and display math — kramdown protects the
-content from Markdown parsing and picks inline/display automatically by context.
-Single `$...$` is NOT safe: kramdown eats `\|` and underscores before MathJax runs.
+Use `$...$` for inline math and a `$$ ... $$` block on its own lines for
+display math. MathJax matches the longer delimiter first, so the two never
+collide, and legacy inline `$$...$$` still works (kramdown rewrites it to
+`\(...\)`).
+
+One caveat for inline `$...$`: kramdown parses that text *before* MathJax
+sees it, so avoid backslash-escaped punctuation (`\,`, `\{`, `\|`, `\\`),
+straight quotes (`\sigma'`), and an `_` right after `}` or `)` — write
+`\lbrace`, `\lbrack`, `\lVert`, `\tilde a_i` instead, or move the formula
+into a `$$` block, where the content is protected verbatim.
