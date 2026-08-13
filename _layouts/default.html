@@ -29,8 +29,11 @@
       window.MathJax = {
         tex: {
           // kramdown emits \(...\) inline and \[...\] display from $$...$$ sources;
-          // single $ is intentionally NOT a delimiter (kramdown mangles its content)
-          inlineMath: [['\\(', '\\)']],
+          // $...$ is also accepted for inline math (kramdown passes it through as
+          // plain text) — such spans must avoid backslash-punctuation escapes
+          // like \, \{ \| and straight quotes, which kramdown would mangle first.
+          // MathJax matches longer delimiters first, so $$ stays display.
+          inlineMath: [['\\(', '\\)'], ['$', '$']],
           displayMath: [['$$', '$$'], ['\\[', '\\]']],
           processEscapes: true
         },

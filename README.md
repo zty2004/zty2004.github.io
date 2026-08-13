@@ -12,7 +12,7 @@ Personal homepage & blog of **Tianyou Zuo (fztym)** — built with [Jekyll](http
 - 🏷️ **Tags** — multi-select filtering (AND / OR) with shareable URLs at `/tags/`
 - 🔍 **Search** — client-side full-text search at `/search/`, index fetched on demand, CJK-friendly
 - 🖼️ **Adaptive photo layouts** — photo-only posts become a loosely hand-laid wall (real aspect ratios, gentle tilt) with Photos.app-style pinch / ⌘-wheel zoom from 1 to 8 across; posts that mix prose and photos pack each run of photos into tidy justified rows. Every image opens in a lightbox with ←/→ navigation and swipe support
-- 🧮 **LaTeX math** — MathJax 3 loaded on demand via `math: true` front matter (always write formulas as `$$...$$`)
+- 🧮 **LaTeX math** — MathJax 3 loaded on demand via `math: true` front matter (`$...$` inline, `$$ ... $$` block for display)
 - 📊 **Mermaid diagrams** — flowcharts and sequence diagrams via `mermaid: true`, re-rendered on theme switch
 - 🌲 **Collapsible TOC** — h2–h4 tree with `tree`-style guides, scroll tracking, desktop sidebar and mobile fold-out
 - 💻 **Code blocks** — Monokai highlighting with copy buttons (always visible on touch devices)
