@@ -3,10 +3,17 @@ layout: null
 ---
 {%- comment -%}
   Search index for /search/. Body text is capped so the file stays small; posts
-  that are essentially photo galleries contribute title and tags only.
+  that are essentially photo galleries contribute title and tags only, and posts
+  tagged `hidden` are left out entirely.
 {%- endcomment -%}
 [
+{% assign listed = '' | split: '' %}
 {% for post in site.posts %}
+  {%- unless post.tags contains 'hidden' -%}
+    {%- assign listed = listed | push: post -%}
+  {%- endunless -%}
+{% endfor %}
+{% for post in listed %}
   {%- assign plain = post.content | strip_html | normalize_whitespace -%}
   {%- if plain.size < 50 -%}
     {%- assign body = '' -%}

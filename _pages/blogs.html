@@ -5,7 +5,12 @@ permalink: /blogs/
 ---
 
 <div class="posts">
+  {%- comment -%}
+    Posts tagged `hidden` stay reachable by direct link but are left out of every
+    listing (this page, /tags/, search, RSS, sitemap).
+  {%- endcomment -%}
   {% for post in site.posts %}
+    {% unless post.tags contains 'hidden' %}
     <article class="post">
 
       <h1><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h1>
@@ -14,7 +19,9 @@ permalink: /blogs/
       {% if post.tags.size > 0 %}
       <span class="post-tags">
         {% for tag in post.tags %}
+        {% unless tag == 'hidden' %}
         <a class="post-tag" href="{{ site.baseurl }}/tags/?tags={{ tag | uri_escape }}">#{{ tag }}</a>
+        {% endunless %}
         {% endfor %}
       </span>
       {% endif %}
@@ -37,5 +44,6 @@ permalink: /blogs/
 
       <a href="{{ site.baseurl }}{{ post.url }}" class="read-more">Read More</a>
     </article>
+    {% endunless %}
   {% endfor %}
 </div>

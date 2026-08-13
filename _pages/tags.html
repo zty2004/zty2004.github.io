@@ -12,15 +12,28 @@ permalink: /tags/
 
   <!-- Tag cloud doubles as a multi-select filter; font size scales with post count -->
   <div class="tag-cloud" id="tag-cloud">
+    {%- comment -%}
+      `hidden` posts are excluded everywhere here, and so is the `hidden` tag
+      itself — a tag whose only posts are hidden disappears with them.
+    {%- endcomment -%}
     {% assign sorted_tags = site.tags | sort %}
     {% for tag in sorted_tags %}
       {% assign tag_name = tag[0] %}
-      {% assign post_count = tag[1] | size %}
-      <button type="button" class="tag-cloud-item" data-tag="{{ tag_name }}"
-              aria-pressed="false"
-              style="font-size: {{ post_count | times: 3 | plus: 14 }}px;">
-        {{ tag_name }}<sup>{{ post_count }}</sup>
-      </button>
+      {% if tag_name != 'hidden' %}
+        {% assign visible = '' | split: '' %}
+        {% for post in tag[1] %}
+          {% unless post.tags contains 'hidden' %}
+            {% assign visible = visible | push: post %}
+          {% endunless %}
+        {% endfor %}
+        {% if visible.size > 0 %}
+        <button type="button" class="tag-cloud-item" data-tag="{{ tag_name }}"
+                aria-pressed="false"
+                style="font-size: {{ visible.size | times: 3 | plus: 14 }}px;">
+          {{ tag_name }}<sup>{{ visible.size }}</sup>
+        </button>
+        {% endif %}
+      {% endif %}
     {% endfor %}
   </div>
 
@@ -38,6 +51,7 @@ permalink: /tags/
   <section class="tag-results" id="tag-results" hidden>
     <ul class="tag-post-list">
       {% for post in site.posts %}
+        {% unless post.tags contains 'hidden' %}
         <li data-tags="{{ post.tags | join: '|' }}">
           <span class="date">{{ post.date | date: "%Y.%m.%d" }}</span>
           <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
@@ -45,6 +59,7 @@ permalink: /tags/
             {% for tag in post.tags %}<span class="post-tag">#{{ tag }}</span>{% endfor %}
           </span>
         </li>
+        {% endunless %}
       {% endfor %}
     </ul>
     <p class="tag-empty" id="tag-empty" hidden>没有文章同时包含所选标签。</p>
@@ -54,17 +69,27 @@ permalink: /tags/
   <div id="tag-groups">
     {% for tag in sorted_tags %}
       {% assign tag_name = tag[0] %}
-      <section class="tag-group" id="{{ tag_name | slugify }}">
-        <h2># {{ tag_name }}</h2>
-        <ul class="tag-post-list">
-          {% for post in tag[1] %}
-            <li>
-              <span class="date">{{ post.date | date: "%Y.%m.%d" }}</span>
-              <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
-            </li>
-          {% endfor %}
-        </ul>
-      </section>
+      {% if tag_name != 'hidden' %}
+        {% assign visible = '' | split: '' %}
+        {% for post in tag[1] %}
+          {% unless post.tags contains 'hidden' %}
+            {% assign visible = visible | push: post %}
+          {% endunless %}
+        {% endfor %}
+        {% if visible.size > 0 %}
+        <section class="tag-group" id="{{ tag_name | slugify }}">
+          <h2># {{ tag_name }}</h2>
+          <ul class="tag-post-list">
+            {% for post in visible %}
+              <li>
+                <span class="date">{{ post.date | date: "%Y.%m.%d" }}</span>
+                <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+        </section>
+        {% endif %}
+      {% endif %}
     {% endfor %}
   </div>
 
