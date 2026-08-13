@@ -785,6 +785,122 @@ nav {
   }
 }
 
+/*********************/
+/* CONTENT TABLES    */
+/*********************/
+
+// kramdown pipe tables in posts and pages. The reset strips every table
+// style, so everything here is deliberate: wide column gutters plus a
+// hairline divider between columns, so dense reference tables (notation,
+// derivative identities) can be scanned column by column.
+// Sizing: max-content keeps a narrow table narrow, max-width caps it at the
+// text column so prose cells wrap, and overflow lets a genuinely wide table
+// scroll instead of crushing its columns.
+.entry {
+  table {
+    display: block;
+    width: max-content;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 1.9em 0;
+    font-size: 15px;
+    line-height: 1.6;
+    color: $darkerGray;
+
+    @include darkmode {
+      color: $textDark;
+    }
+
+    @include mobile {
+      font-size: 14px;
+    }
+  }
+
+  thead th {
+    padding: 12px 26px;
+    text-align: left;
+    vertical-align: bottom;
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: $accentDark;
+    background: $accentSoft;
+    border-bottom: 2px solid rgba(222, 118, 74, 0.42);
+
+    @include darkmode {
+      color: #f0a883;
+      background: rgba(222, 118, 74, 0.13);
+    }
+  }
+
+  td {
+    padding: 12px 26px;
+    vertical-align: top;
+    border-top: 1px solid $border;
+
+    @include darkmode {
+      border-top-color: $borderDark;
+    }
+  }
+
+  // the column divider — what actually makes adjacent columns read apart
+  th + th,
+  td + td {
+    border-left: 1px solid rgba(0, 0, 0, 0.13);
+
+    @include darkmode {
+      border-left-color: rgba(255, 255, 255, 0.15);
+    }
+  }
+
+  // keep the outer edges tight so the table still lines up with the text
+  th:first-child,
+  td:first-child {
+    padding-left: 14px;
+  }
+
+  th:last-child,
+  td:last-child {
+    padding-right: 14px;
+  }
+
+  tbody tr:nth-child(even) td {
+    background: rgba(0, 0, 0, 0.022);
+
+    @include darkmode {
+      background: rgba(255, 255, 255, 0.03);
+    }
+  }
+
+  tbody tr:hover td {
+    background: rgba(222, 118, 74, 0.07);
+
+    @include darkmode {
+      background: rgba(222, 118, 74, 0.12);
+    }
+  }
+
+  @include mobile {
+    thead th,
+    td {
+      padding: 10px 16px;
+    }
+
+    th:first-child,
+    td:first-child {
+      padding-left: 12px;
+    }
+
+    th:last-child,
+    td:last-child {
+      padding-right: 12px;
+    }
+  }
+}
+
 .wrapper-footer {
   margin-top: 70px;
   border-top: 1px solid $border;
