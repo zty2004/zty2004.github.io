@@ -394,18 +394,18 @@ vanishing signals, and the motivation for spectral normalization.
 This is the definition worth internalizing, because it makes every later
 formula a shape check rather than a memory test.
 
-> $f : \mathbb{R}^n \to \mathbb{R}^m$ is **differentiable** at $x$ if
-> there exists a *linear* map $Df(x) : \mathbb{R}^n \to \mathbb{R}^m$ such
-> that $f(x + h) = f(x) + Df(x) h + o(\lVert h \rVert)$ as $h \to 0$.
-
-Spelled out as a limit,
+**Definition.** $f : \mathbb{R}^n \to \mathbb{R}^m$ is **differentiable** at
+$x$ if there exists a *linear* map $Df(x) : \mathbb{R}^n \to \mathbb{R}^m$
+such that
 
 $$
-\lim_{h \to 0} \frac{\lVert f(x + h) - f(x) - Df(x)\,h \rVert}{\lVert h \rVert} = 0 .
+f(x + h) = f(x) + Df(x)\,h + o(\lVert h \rVert), \qquad h \to 0 .
 $$
 
-So a derivative is *the best linear approximation of $f$ near $x$*, and
-its matrix is the Jacobian. Two warnings that matter in practice:
+Here $o(\lVert h \rVert)$ means a remainder that vanishes faster than $h$
+itself, i.e. $\lVert r(h) \rVert / \lVert h \rVert \to 0$. So a derivative is
+*the best linear approximation of $f$ near $x$*, and its matrix is the
+Jacobian. Two warnings that matter in practice:
 
 - Existence of all partial derivatives does **not** imply differentiability
   (the standard counterexample is $f(x,y) = xy/(x^2+y^2)$, $f(0,0)=0$).
