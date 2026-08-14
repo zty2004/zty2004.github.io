@@ -47,7 +47,7 @@ def run_kernel(
     BLOCK = 1024 
     A = A.contiguous() # make A continuous in memory
     B = B.contiguous() # make B continuous in memory
-    grid = (triton.cdiv(numel, BLOCK), ) # calculate the 
+    grid = (triton.cdiv(numel, BLOCK), ) # ceil div "," indicates this is a tuple 
     vector_add[grid](A, B, numel, BLOCK); # call triton kernel
     return A
 ```
