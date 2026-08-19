@@ -48,26 +48,26 @@ jobs:
       - name: Download the latest CV
         run: |
           curl -fsSL --retry 3 --retry-delay 5 \
-            "https://github.com/zty2004/CV/releases/download/latest/cv.pdf" \
-            -o /tmp/cv.pdf
+            "https://github.com/zty2004/CV/releases/download/latest/cv-a.pdf" \
+            -o /tmp/cv-a.pdf
           # a 404 page or an error would otherwise be committed as "the CV"
-          if [ "$(head -c 5 /tmp/cv.pdf)" != "%PDF-" ]; then
+          if [ "$(head -c 5 /tmp/cv-a.pdf)" != "%PDF-" ]; then
             echo "::error::downloaded file is not a PDF — is the release published?"
             exit 1
           fi
-          echo "downloaded $(wc -c < /tmp/cv.pdf) bytes"
+          echo "downloaded $(wc -c < /tmp/cv-a.pdf) bytes"
 
       - name: Commit when the CV changed
         run: |
           mkdir -p assets/pdf
-          if [ -f assets/pdf/cv.pdf ] && cmp -s /tmp/cv.pdf assets/pdf/cv.pdf; then
+          if [ -f assets/pdf/cv-a.pdf ] && cmp -s /tmp/cv-a.pdf assets/pdf/cv-a.pdf; then
             echo "CV is already up to date — nothing to commit"
             exit 0
           fi
-          cp /tmp/cv.pdf assets/pdf/cv.pdf
+          cp /tmp/cv-a.pdf assets/pdf/cv-a.pdf
           git config user.name  'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
-          git add assets/pdf/cv.pdf
+          git add assets/pdf/cv-a.pdf
           git commit -m 'chore. sync latest CV from the CV repo [skip ci]'
           git push
           echo "CV updated — GitHub Pages will rebuild automatically"
