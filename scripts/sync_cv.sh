@@ -3,15 +3,15 @@
 # sync_cv.sh — refresh the local CV copy from the CV repo's latest release.
 #
 # Normally you do NOT need this: .github/workflows/sync-cv.yml keeps
-# assets/pdf/cv.pdf up to date automatically. Keep this script for when you want
+# assets/pdf/cv-a.pdf up to date automatically. Keep this script for when you want
 # the newest CV on the site right now without waiting for the scheduled run.
 #
 # Usage: ./scripts/sync_cv.sh
 
 set -euo pipefail
 
-SOURCE="https://github.com/zty2004/CV/releases/download/latest/cv.pdf"
-DEST="assets/pdf/cv.pdf"
+SOURCE="https://github.com/zty2004/CV/releases/download/latest/cv-a.pdf"
+DEST="assets/pdf/cv-a.pdf"
 
 if [ ! -f _config.yml ]; then
   echo "sync_cv: run this from the repository root" >&2
