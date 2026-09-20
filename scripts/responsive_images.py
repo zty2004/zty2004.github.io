@@ -108,7 +108,8 @@ def build(img_token, src, index, gallery):
 
 
 def process(md_file):
-    text = open(md_file, encoding="utf-8").read()
+    with open(md_file, encoding="utf-8") as f:
+        text = f.read()
     gallery = is_gallery(text)
     out = []
     pos = 0
@@ -135,8 +136,11 @@ def process(md_file):
             continue
 
         rebuilt = build(img_token, src_m.group(1), index, gallery)
+        if rebuilt is None:
+            out.append(token)      # not ours to manage; don't spend an eager slot
+            continue
         index += 1
-        if rebuilt is None or rebuilt == token:
+        if rebuilt == token:
             out.append(token)
             continue
         out.append(rebuilt)
@@ -144,7 +148,8 @@ def process(md_file):
 
     out.append(text[pos:])
     if changed:
-        open(md_file, "w", encoding="utf-8").write("".join(out))
+        with open(md_file, "w", encoding="utf-8") as f:
+            f.write("".join(out))
     print(f"{md_file}: {changed} image tags rewritten ({index} total, gallery={gallery})")
 
 
