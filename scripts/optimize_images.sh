@@ -11,6 +11,7 @@
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 IMAGES_DIR="${1:-images}"
 MAX_WIDTH=1600
 QUALITY=80
@@ -43,6 +44,11 @@ while IFS= read -r -d '' img; do
   total_after=$((total_after + size_after))
   processed=$((processed + 1))
 done < <(find "$IMAGES_DIR" \( -iname '*.jpg' -o -iname '*.jpeg' \) -print0)
+
+# sips copies EXIF straight through a re-encode, so the device model, firmware
+# string and capture timestamps would survive to the published page. Its own
+# pass rather than part of the loop above: SKIP_UNDER never touches small files.
+python3 "$SCRIPT_DIR/strip_metadata.py" "$IMAGES_DIR"
 
 echo "----------------------------------------"
 echo "Processed: $processed  Skipped(small): $skipped"

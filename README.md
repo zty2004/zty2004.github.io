@@ -76,12 +76,14 @@ After adding or importing photos, run these scripts in order. Each is idempotent
 
 | # | Script | Purpose |
 |---|---|---|
-| 1 | `scripts/optimize_images.sh` | Resize JPEGs to ≤1600px wide, quality 80 |
+| 1 | `scripts/optimize_images.sh` | Resize JPEGs to ≤1600px wide, quality 80; strip EXIF/XMP/IPTC |
 | 2 | `scripts/convert_webp.sh` | Make a full-size WebP sibling; deletes it if larger than the JPEG |
 | 3 | `scripts/make_variants.sh` | Make the 200 / 480 / 800px WebP tiers |
 | 4 | `scripts/add_img_dimensions.py` | Backfill `width`/`height` on `<img>` (prevents layout shift) |
 | 5 | `scripts/responsive_images.py` | Rewrite markup: multi-tier `srcset` + `sizes` + LCP attributes on the first tile |
 | 6 | `scripts/generate_thumbs.py` | Build list-page thumbnails and write `thumb:` into front matter |
+
+`sips` copies EXIF straight through a re-encode, so without an explicit strip the published JPEG fallbacks hand every visitor the camera make and model, the firmware build string, and the capture timestamp to the second. `scripts/strip_metadata.py` removes the EXIF, XMP and IPTC segments while keeping JFIF and ICC — the compressed image data is copied through untouched, so pixels are byte-identical and only the metadata bytes disappear. `cwebp` drops metadata on its own, which is why the WebP tiers never needed it. Run `python3 scripts/strip_metadata.py images --check` to audit without changing anything; it exits non-zero if any image still carries metadata.
 
 The browser picks a tier from `srcset` using each cell's real width. `gallery.js` rewrites `<source sizes>` on every layout and zoom step, so zooming really does change resolution, not just layout. The lightbox always loads the full-size file. Average tier file sizes across all 443 photos: 200px → 6.7 KB, 480px → 32 KB, 800px → 78 KB.
 

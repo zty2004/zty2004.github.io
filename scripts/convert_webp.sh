@@ -7,7 +7,9 @@
 # deleted rather than shipped. Idempotent: a .webp newer than its source is
 # skipped, so re-runs are cheap.
 #
-# Requires cwebp (brew install webp).
+# Requires cwebp (brew install webp). cwebp drops EXIF/XMP unless -exif/-xmp is
+# passed, so these derivatives carry no metadata; the JPEG fallbacks are the ones
+# that need scripts/strip_metadata.py.
 # Usage: ./scripts/convert_webp.sh [images-dir]
 
 set -euo pipefail
