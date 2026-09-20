@@ -1618,9 +1618,12 @@ footer {
   background: none;
   cursor: zoom-in;
   line-height: 0;
-  // skip rendering work for tiles scrolled out of view (big walls stay smooth)
+  // skip rendering work for tiles scrolled out of view (big walls stay smooth);
+  // `auto` keeps the height the tile really had, so justified rows in
+  // gallery-compact (which get no per-item hint from JS) don't jump
   content-visibility: auto;
-  contain-intrinsic-size: 260px;
+  contain-intrinsic-size: 260px;      // browsers without the `auto` keyword
+  contain-intrinsic-size: auto 260px;
 
   &.is-wide {
     grid-column: span 2;
