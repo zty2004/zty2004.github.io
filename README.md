@@ -19,7 +19,7 @@ Personal homepage & blog of **Tianyou Zuo (fztym)** — built with [Jekyll](http
 - ⌨️ **Keyboard shortcuts** — `/` search, `g h/b/t/s` navigation, `j/k` headings, `t` theme, `c` TOC, `?` help
 - 📈 **Reading progress bar** — sunset gradient line tracking position within the article
 - 💬 **Comments & stats** — [giscus](https://giscus.app) (GitHub Discussions) with live theme sync, busuanzi visitor counters
-- ⚡ **Performance** — WebP with JPEG fallback (219 MB → 87 MB), explicit image dimensions (no layout shift), index thumbnails, self-hosted subset webfont (3 KB), third-party scripts deferred until needed
+- ⚡ **Performance** — responsive WebP tiers (Japan post: 12 MB → 1.2 MB at desktop, 0.23 MB zoomed out), explicit image dimensions (no layout shift), index thumbnails, self-hosted subset webfont (3 KB), third-party scripts deferred until needed
 - 🔎 **SEO** — `jekyll-seo-tag`, `BlogPosting` JSON-LD, thumbnail-based Open Graph cards, RSS with absolute image URLs
 
 ## Site map
@@ -45,8 +45,8 @@ Personal homepage & blog of **Tianyou Zuo (fztym)** — built with [Jekyll](http
 │   ├── css/          # main stylesheet entry (style.scss)
 │   ├── js/           # TOC + copy buttons, gallery lightbox, shortcuts, mermaid
 │   └── fonts/        # self-hosted subset cursive font (OFL)
-├── images/           # post photos (JPEG + WebP siblings, web-optimised)
-├── scripts/          # maintenance scripts (image optimiser, WebP, thumbs, font subset)
+├── images/           # post photos (JPEG + WebP in 200/480/800/1600 tiers)
+├── scripts/          # image pipeline (optimise, WebP tiers, responsive markup, thumbs)
 ├── search.json       # search index (Liquid-generated)
 ├── feed.xml          # RSS feed with absolute image URLs
 └── src/              # postgen CLI tool (C++20)
@@ -69,6 +69,32 @@ cd src && make                      # build once (requires clang++, C++20)
 - Local images are copied into `images/<date>-<slug>/` and compressed with `sips`
 - Add `--publish` to git add + commit + push in one go
 - Other flags: `--date`, `--math`, `--force`, `--dry-run`
+
+## Image pipeline
+
+After adding or importing photos, run these scripts in order. Each is idempotent and safe to re-run.
+
+| # | Script | Purpose |
+|---|---|---|
+| 1 | `scripts/optimize_images.sh` | Resize JPEGs to ≤1600px wide, quality 80 |
+| 2 | `scripts/convert_webp.sh` | Make a full-size WebP sibling; deletes it if larger than the JPEG |
+| 3 | `scripts/make_variants.sh` | Make the 200 / 480 / 800px WebP tiers |
+| 4 | `scripts/add_img_dimensions.py` | Backfill `width`/`height` on `<img>` (prevents layout shift) |
+| 5 | `scripts/responsive_images.py` | Rewrite markup: multi-tier `srcset` + `sizes` + LCP attributes on the first tile |
+| 6 | `scripts/generate_thumbs.py` | Build list-page thumbnails and write `thumb:` into front matter |
+
+The browser picks a tier from `srcset` using each cell's real width. `gallery.js` rewrites `<source sizes>` on every layout and zoom step, so zooming really does change resolution, not just layout. The lightbox always loads the full-size file. Average tier file sizes across all 444 photos: 200px → 6.9 KB, 480px → 33 KB, 800px → 78 KB.
+
+Whole-post image payload before this work vs. per tier:
+
+| Post | Photos | Before | all-200w | all-480w | all-800w |
+|---|---:|---:|---:|---:|---:|
+| Japan | 42 | 12.09 MB | 0.23 MB | 1.21 MB | 3.29 MB |
+| Hangzhou | 14 | 11.00 MB | 0.16 MB | 1.06 MB | 2.78 MB |
+| Switzerland | 79 | 17.36 MB | 0.47 MB | 2.25 MB | 5.41 MB |
+| Germany | 296 | 67.76 MB | 1.96 MB | 9.11 MB | 21.46 MB |
+
+On a typical desktop (~3-across) the browser picks the 480w tier; a phone at 45vw with a 3× display gets 800w; zoomed out to 8-across gets 200w; 1-across or the lightbox loads full size. For the Japan post that means 12.09 MB → 1.21 MB at the default desktop view (about 10× smaller), and 0.23 MB when zoomed out to 8-across (about 53×).
 
 ## Local development
 
