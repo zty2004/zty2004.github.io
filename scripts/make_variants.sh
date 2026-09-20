@@ -25,7 +25,7 @@ fi
 made=0
 skipped=0
 toosmall=0
-bytes=0
+added_bytes=0
 
 tmp="$(mktemp -d)"
 trap 'rm -rf "$tmp"' EXIT
@@ -46,14 +46,15 @@ while IFS= read -r -d '' img; do
       continue
     fi
 
-    sips --resampleWidth "$w" "$img" --out "$tmp/r.jpg" >/dev/null
+    sips --resampleWidth "$w" "$img" --out "$tmp/r.jpg" >/dev/null \
+      || { echo "make_variants: resample failed on $img" >&2; exit 1; }
     cwebp -quiet -q "$QUALITY" -m 4 "$tmp/r.jpg" -o "$out"
     made=$((made + 1))
-    bytes=$((bytes + $(stat -f%z "$out")))
+    added_bytes=$((added_bytes + $(stat -f%z "$out")))
   done
 done < <(find "$IMAGES_DIR" \( -iname '*.jpg' -o -iname '*.jpeg' \) \
            -not -iname 'thumb.*' -print0)
 
 echo "----------------------------------------"
 echo "Tiers made: $made   up-to-date: $skipped   source narrower than tier: $toosmall"
-echo "Added: $((bytes / 1024 / 1024)) MB"
+echo "Added (this run): $((added_bytes / 1024 / 1024)) MB"
