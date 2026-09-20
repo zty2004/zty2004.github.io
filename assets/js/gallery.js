@@ -97,6 +97,16 @@
       return h / w;
     }
 
+    // `sizes` lives on the <source>, so the browser picks the tier that matches
+    // the slot the photo actually got — which changes with the zoom level. This
+    // is what makes pinch-zoom change resolution, not just layout.
+    function setSizes(img, px) {
+      if (!img || !(px > 1)) return;
+      var pic = img.closest('picture');
+      var source = pic && pic.querySelector('source[sizes]');
+      if (source) source.sizes = Math.round(px) + 'px';
+    }
+
     // deterministic pseudo-random so a reload doesn't reshuffle the wall
     function jitter(i) {
       var x = Math.sin((i + 1) * 12.9898) * 43758.5453;
@@ -113,6 +123,12 @@
           var img = cell.querySelector('img');
           cell.style.setProperty('--ar', (1 / ratioOf(img)).toFixed(4));
         });
+        // justified-row widths only exist once flex has run
+        requestAnimationFrame(function () {
+          cells.forEach(function (cell) {
+            setSizes(cell.querySelector('img'), cell.getBoundingClientRect().width);
+          });
+        });
         return;
       }
 
@@ -124,11 +140,14 @@
         var wide = cols >= 3 && jitter(i) > 0.8;
         cell.classList.toggle('is-wide', wide);
         var slotW = wide ? colW * 2 + GAP : colW;
-        var h = slotW * ratioOf(cell.querySelector('img'));
+        var img = cell.querySelector('img');
+        var h = slotW * ratioOf(img);
+        setSizes(img, slotW);
         cell.style.gridRowEnd = 'span ' + Math.max(2, Math.round((h + GAP) / (ROW + GAP)));
         // tell the browser how tall an off-screen tile is, so content-visibility
-        // can skip it without the scrollbar jumping around
-        cell.style.containIntrinsicSize = Math.round(h) + 'px';
+        // can skip it without the scrollbar jumping around; `auto` lets it
+        // remember the real height once the tile has been painted
+        cell.style.containIntrinsicSize = 'auto ' + Math.round(h) + 'px';
 
         // tilt: -1.6deg .. +1.6deg, plus a hair of vertical drift.
         // A single-column view is "inspect one photo" mode — keep those straight.
@@ -291,9 +310,13 @@
 
     function show(i) {
       current = (i + items.length) % items.length;
-      var src = items[current].currentSrc || items[current].src;
-      bigImg.src = src;
-      bigImg.alt = items[current].alt || '';
+      var el = items[current];
+      // the grid may be showing a small tier; the viewer wants the real thing.
+      // data-full-webp only exists when a full-size WebP sibling does, so fall
+      // back to the <img> src (always the full-size JPEG).
+      var onWebp = /\.webp(\?|#|$)/.test(el.currentSrc || '');
+      bigImg.src = (onWebp && el.dataset.fullWebp) ? el.dataset.fullWebp : el.src;
+      bigImg.alt = el.alt || '';
       counter.textContent = (current + 1) + ' / ' + items.length;
     }
     function open(i) {
