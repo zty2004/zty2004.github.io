@@ -19,7 +19,7 @@ Personal homepage & blog of **Tianyou Zuo (fztym)** — built with [Jekyll](http
 - ⌨️ **Keyboard shortcuts** — `/` search, `g h/b/t/s` navigation, `j/k` headings, `t` theme, `c` TOC, `?` help
 - 📈 **Reading progress bar** — sunset gradient line tracking position within the article
 - 💬 **Comments & stats** — [giscus](https://giscus.app) (GitHub Discussions) with live theme sync, busuanzi visitor counters
-- ⚡ **Performance** — responsive WebP tiers (Japan post: 12 MB → 1.2 MB at desktop, 0.23 MB zoomed out), explicit image dimensions (no layout shift), index thumbnails, self-hosted subset webfont (3 KB), third-party scripts deferred until needed
+- ⚡ **Performance** — responsive WebP tiers (Japan post: 12 MB → 1.2 MB at 3-across on a 1× display, 3.1 MB on a 2× one, 0.46 MB zoomed out to 8-across), explicit image dimensions (no layout shift), index thumbnails, self-hosted subset webfont (3 KB), third-party scripts deferred until needed
 - 🔎 **SEO** — `jekyll-seo-tag`, `BlogPosting` JSON-LD, thumbnail-based Open Graph cards, RSS with absolute image URLs
 
 ## Site map
@@ -85,7 +85,7 @@ After adding or importing photos, run these scripts in order. Each is idempotent
 
 The browser picks a tier from `srcset` using each cell's real width. `gallery.js` rewrites `<source sizes>` on every layout and zoom step, so zooming really does change resolution, not just layout. The lightbox always loads the full-size file. Average tier file sizes across all 444 photos: 200px → 6.9 KB, 480px → 33 KB, 800px → 78 KB.
 
-Whole-post image payload before this work vs. per tier:
+Whole-post image payload. "Before" is what the page actually cost pre-branch — the full-size WebP for each photo, or the JPEG where no WebP came out smaller:
 
 | Post | Photos | Before | all-200w | all-480w | all-800w |
 |---|---:|---:|---:|---:|---:|
@@ -94,7 +94,17 @@ Whole-post image payload before this work vs. per tier:
 | Switzerland | 79 | 17.36 MB | 0.47 MB | 2.25 MB | 5.41 MB |
 | Germany | 296 | 67.76 MB | 1.96 MB | 9.11 MB | 21.46 MB |
 
-Selection scales with device pixel ratio, because `sizes` is a CSS width. The 720px grid gives 233px cells at 3-across (480w at 1–2×, 800w at 3×) and 81px cells at 8-across (200w at 1–2×); a phone defaults to 2-across, ≈171px cells, which is 800w at 3×. Only 1-across on a 2× display reaches the full-size tier — the lightbox loads it regardless. For the Japan post that means 12.09 MB → 1.21 MB at the default desktop view (about 10× smaller), and 0.23 MB when zoomed out to 8-across (about 53×).
+Selection scales with device pixel ratio, because `sizes` is a CSS width. The 720px grid gives 233px cells at 3-across and 81px at 8-across, and one tile in five is double-width (477px at 3-across) whenever there are at least 3 columns. A normal cell therefore takes 480w at 1–2× and 800w at 3×; a double-width cell at 2× needs 954 device px, which skips 800w and lands on the full-size tier; 8-across fits in 200w at 1–2×. A phone defaults to 2-across (≈171px cells → 480w at 2×, 800w at 3×). The lightbox loads full size regardless of what the grid settled on.
+
+Measured on the Japan post, whose 10 double-width tiles are what pull the 2× numbers up:
+
+| Scenario | Payload | vs. before |
+|---|---:|---:|
+| Before this branch | 12.09 MB | — |
+| 3-across, 1× display | 1.21 MB | 10× |
+| 3-across, 2× display | 3.10 MB | 3.9× |
+| 8-across, 2× display | 0.46 MB | 26× |
+| 1-across, 2× display | 9.25 MB | 1.3× |
 
 ## Local development
 
