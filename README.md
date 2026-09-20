@@ -94,7 +94,7 @@ Whole-post image payload. "Before" is what the page actually cost pre-branch —
 | Switzerland | 79 | 17.36 MB | 0.47 MB | 2.25 MB | 5.41 MB |
 | Germany | 296 | 67.76 MB | 1.96 MB | 9.11 MB | 21.46 MB |
 
-Selection scales with device pixel ratio, because `sizes` is a CSS width. The 720px grid gives 233px cells at 3-across and 81px at 8-across, and one tile in five is double-width (477px at 3-across) whenever there are at least 3 columns. A normal cell therefore takes 480w at 1–2× and 800w at 3×; a double-width cell at 2× needs 954 device px, which skips 800w and lands on the full-size tier; 8-across fits in 200w at 1–2×. A phone defaults to 2-across (≈171px cells → 480w at 2×, 800w at 3×). The lightbox loads full size regardless of what the grid settled on.
+Selection scales with device pixel ratio, because `sizes` is a CSS width. The 720px grid gives 233px cells at 3-across and 81px at 8-across, and roughly a fifth of tiles get a double-width slot (477px at 3-across) whenever there are at least 3 columns — the rule is pseudo-random, so short walls are lumpier (5 of 14 in Hangzhou, 10 of 42 in Japan, 59 of 296 in Germany). A normal cell therefore takes 480w at 1–2× and 800w at 3×; a double-width cell at 2× needs 954 device px, which skips 800w and lands on the full-size tier; 8-across fits in 200w at 1–2×. A phone defaults to 2-across (≈171px cells → 480w at 2×, 800w at 3×). The lightbox loads full size regardless of what the grid settled on.
 
 Measured on the Japan post, whose 10 double-width tiles are what pull the 2× numbers up:
 
