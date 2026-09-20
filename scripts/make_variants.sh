@@ -28,10 +28,15 @@ toosmall=0
 added_bytes=0
 
 tmp="$(mktemp -d)"
-trap 'rm -rf "$tmp"' EXIT
+part=""
+trap 'rm -rf "$tmp"; if [ -n "$part" ]; then rm -f "$part"; fi' EXIT
 
 while IFS= read -r -d '' img; do
   src_w=$(sips -g pixelWidth "$img" | awk '/pixelWidth/ {print $2}')
+  if [ -z "$src_w" ]; then
+    echo "make_variants: cannot read pixelWidth from $img" >&2
+    exit 1
+  fi
   base="${img%.*}"
 
   for w in $TIERS; do
@@ -48,7 +53,12 @@ while IFS= read -r -d '' img; do
 
     sips --resampleWidth "$w" "$img" --out "$tmp/r.jpg" >/dev/null \
       || { echo "make_variants: resample failed on $img" >&2; exit 1; }
-    cwebp -quiet -q "$QUALITY" -m 4 "$tmp/r.jpg" -o "$out"
+    # encode to a sibling temp then rename: a half-written tier would otherwise
+    # look newer than its source and be skipped as up-to-date forever
+    part="$out.tmp"
+    cwebp -quiet -q "$QUALITY" -m 4 "$tmp/r.jpg" -o "$part"
+    mv -f "$part" "$out"
+    part=""
     made=$((made + 1))
     added_bytes=$((added_bytes + $(stat -f%z "$out")))
   done

@@ -26,6 +26,9 @@ converted=0
 skipped=0
 dropped=0
 
+part=""
+trap 'if [ -n "$part" ]; then rm -f "$part"; fi' EXIT
+
 while IFS= read -r -d '' img; do
   webp="${img%.*}.webp"
   jpg_size=$(stat -f%z "$img")
@@ -33,7 +36,12 @@ while IFS= read -r -d '' img; do
   if [ -f "$webp" ] && [ "$webp" -nt "$img" ]; then
     skipped=$((skipped + 1))
   else
-    cwebp -quiet -q "$QUALITY" -m 4 "$img" -o "$webp"
+    # encode to a sibling temp then rename: a half-written WebP would otherwise
+    # look newer than its source and be served as the top tier forever
+    part="$webp.tmp"
+    cwebp -quiet -q "$QUALITY" -m 4 "$img" -o "$part"
+    mv -f "$part" "$webp"
+    part=""
     # A WebP that lost to its own JPEG is worse than no WebP: <picture> would
     # serve the bigger file. Drop it and let the JPEG stand. (Re-encoded on the
     # next run — only a handful of high-entropy photos hit this.)
