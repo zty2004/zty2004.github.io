@@ -94,7 +94,7 @@ Whole-post image payload before this work vs. per tier:
 | Switzerland | 79 | 17.36 MB | 0.47 MB | 2.25 MB | 5.41 MB |
 | Germany | 296 | 67.76 MB | 1.96 MB | 9.11 MB | 21.46 MB |
 
-On a typical desktop (~3-across) the browser picks the 480w tier; a phone at 45vw with a 3× display gets 800w; zoomed out to 8-across gets 200w; 1-across or the lightbox loads full size. For the Japan post that means 12.09 MB → 1.21 MB at the default desktop view (about 10× smaller), and 0.23 MB when zoomed out to 8-across (about 53×).
+Selection scales with device pixel ratio, because `sizes` is a CSS width. The 720px grid gives 233px cells at 3-across (480w at 1–2×, 800w at 3×) and 81px cells at 8-across (200w at 1–2×); a phone defaults to 2-across, ≈171px cells, which is 800w at 3×. Only 1-across on a 2× display reaches the full-size tier — the lightbox loads it regardless. For the Japan post that means 12.09 MB → 1.21 MB at the default desktop view (about 10× smaller), and 0.23 MB when zoomed out to 8-across (about 53×).
 
 ## Local development
 
