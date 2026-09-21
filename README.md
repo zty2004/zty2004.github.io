@@ -76,12 +76,15 @@ After adding or importing photos, run these scripts in order. Each is idempotent
 
 | # | Script | Purpose |
 |---|---|---|
+| 0 | `scripts/anonymize_filenames.py` | Rename `IMG_YYYYMMDD_HHMMSS…` imports to content-hash ids, and rewrite `_posts/` to match |
 | 1 | `scripts/optimize_images.sh` | Resize JPEGs to ≤1600px wide, quality 80; strip EXIF/XMP/IPTC |
 | 2 | `scripts/convert_webp.sh` | Make a full-size WebP sibling; deletes it if larger than the JPEG |
 | 3 | `scripts/make_variants.sh` | Make the 200 / 480 / 800px WebP tiers |
 | 4 | `scripts/add_img_dimensions.py` | Backfill `width`/`height` on `<img>` (prevents layout shift) |
 | 5 | `scripts/responsive_images.py` | Rewrite markup: multi-tier `srcset` + `sizes` + LCP attributes on the first tile |
 | 6 | `scripts/generate_thumbs.py` | Build list-page thumbnails and write `thumb:` into front matter |
+
+Run step 0 before anything generates markup. Phone exports arrive named `IMG_20240101_142614.jpg`, which puts the capture time — to the second — into every page URL, where it is readable long after the EXIF has been stripped. The script renames each photo to the first 16 hex digits of its JPEG's SHA-256 and keeps the `-200`/`-480`/`-800` tiers on the same stem, so `srcset` is unaffected. It only ever touches names matching `IMG_<8 digits>_<6 digits>`, which makes re-runs a no-op and keeps a later re-encode from renaming files out from under the markup.
 
 `sips` copies EXIF straight through a re-encode, so without an explicit strip the published JPEG fallbacks hand every visitor the camera make and model, the firmware build string, and the capture timestamp to the second. `scripts/strip_metadata.py` removes the EXIF, XMP and IPTC segments while keeping JFIF and ICC — the compressed image data is copied through untouched, so pixels are byte-identical and only the metadata bytes disappear. `cwebp` drops metadata on its own, which is why the WebP tiers never needed it. Run `python3 scripts/strip_metadata.py images --check` to audit without changing anything; it exits non-zero if any image still carries metadata.
 
